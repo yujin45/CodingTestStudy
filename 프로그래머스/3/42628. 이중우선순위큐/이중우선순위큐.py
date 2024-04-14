@@ -30,6 +30,7 @@ def solution(operations):
             #print(largest)
             heap.remove(largest) # 그냥 지우면 빵꾸나서 힙 아니고 걍 리스트 되어버리는 듯
             #print(heap)
+            heapq.heapify(heap)
         elif "D -1" in op and heap:
             heapq.heappop(heap)
             #print(heap)
