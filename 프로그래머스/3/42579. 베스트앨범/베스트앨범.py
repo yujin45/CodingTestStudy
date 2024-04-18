@@ -1,5 +1,4 @@
 
-
 def solution(genres, plays):
     answer = []
     #1.  속한 노래가 많이 재생된 장르를 먼저 수록합니다
