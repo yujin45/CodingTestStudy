@@ -1,5 +1,3 @@
-def solution(ls):
+def solution(nums):
     
-    
-    
-    return min(len(ls)/2, len(set(ls)))
+    return min(len(nums)//2, len(set(nums)))    
