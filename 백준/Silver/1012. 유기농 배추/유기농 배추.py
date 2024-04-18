@@ -34,5 +34,4 @@ for _ in range(T):
                 count +=1
         
     print(count)
-    count = 0   
-    
+    count = 0
