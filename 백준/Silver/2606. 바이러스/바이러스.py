@@ -1,24 +1,27 @@
-N = int(input()) # 컴퓨터의 수 1번부터 번호
-M = int(input()) # 연결 간선
+# 1번에 연결되어 있는 애들 개수 구하는 것
 
+N = int(input())
+M = int(input())
 
-graph = [[0]*(N+1) for _ in range(N+1)] #인덱스를 노드 번호로
-# 연결 입력 받기
-for i in range(M):
+graph = [[0]*(N+1) for _ in range(N+1)]
+vistied = [0]*(N+1)
+for _ in range(M):
     a, b = map(int, input().split())
-    graph[a][b] = graph[b][a] = 1
+    graph[a][b] = graph[b][a]=1 # 양방향
 
-visited1= [0]*(N+1) # 인덱스 번호가 노드 번호
+def dfs(graph, v, visited):
+    global count
+    visited[v]=1 # 방문 표시
+    #print(v, end=" ")
+    count+=1
 
-def dfs(V):
-    # 시작 정점이 V 우리는 1번이 될 것임
-    visited1[V] = 1
     for i in range(N+1):
-        if graph[V][i] == 1 and visited1[i]==0:
-            # 연결된 노드이고 방문 안했으면
-            dfs(i) # 쭉 방문
-            
-    # 전체를 다 돌고나서 방문 표시된 노드 확인
-    return visited1.count(1)-1 # 1 표시된 노드 개수 반환에 1번째는 빼기
+        if graph[v][i]==1 and visited[i]==0:
+            # 노드 존재하고 방문 전이면
+            dfs(graph, i, visited)
 
-print(dfs(1))
+
+count = 0
+dfs(graph, 1, vistied)
+
+print(count-1)
