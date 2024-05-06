@@ -1,41 +1,19 @@
-/*
-0. banana일 때
-1. reverse로  ananab 만들기
-2. 인덱스로 자기 자신 이후 자기 자신이 나오는 처음 위치 받기 indexOf(String, int) int번 인덱스부터 String의 인덱스 찾아 반환, 없으면 -1
-3. 자신의 위치와 차이 구해서 배열에 저장해두기
-4. 저장한 것 reverse로 뒤집어서 반환
-*/
-/*
-lastIndexOf(String, int) 뒤에서 찾는 함수가 있었다! 인덱스 int부터 역순으로 탐색
-*/
+import java.util.HashMap;
+
 class Solution {
     public int[] solution(String s) {
-        int[] answer = new int[s.length()];
-        char now;
-        int findIndex;
-        // 1. 문자열을 역순으로 탐색한다. 
-        for(int i = s.length()-1; i>=0; i--){
-            //System.out.print(s.charAt(i));
-            // 2. 뒤에서부터 인덱스를 찾아
-            // 지금 문자
-            if(i==0){
-                // -1
-                answer[i] = -1;
-                break;   
-            }
-            now = s.charAt(i);
-            //System.out.println(now+i);
-            
-            findIndex = s.lastIndexOf(now, i-1);
-            if(findIndex == -1){
-                answer[i] = -1;
-            }else{
-                answer[i] = i - findIndex;
-                //System.out.println(findIndex+"="+(i - findIndex));
-            }
-            
-            
+        int[] answer = new int[s.length()]; // s길이 만큼
+        HashMap<Character, Integer> map = new HashMap<>();
+        // 글자와 인덱스 몇번째에 있는지 관리해줄 key-value
+        for(int i = 0; i<s.length(); i++){
+            char ch = s.charAt(i); // 현재 글자
+            answer[i] = i - map.getOrDefault(ch, i+1); 
+            // map에 없으면 자기 자신 위치- (자기자신 위치+1) 해서 -1을 저장함
+            // map에 있으면 그 위치 인덱스가 반환되어 빼서 얼마나 앞에 위치해있는지 저장함
+            map.put(ch, i); // 기존 값 있으면 업데이트 됨
+            //System.out.println(map.entrySet()); // key-value 전체 보여줌
         }
+
         return answer;
     }
 }
