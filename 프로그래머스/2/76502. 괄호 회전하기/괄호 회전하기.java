@@ -19,11 +19,12 @@ class Solution {
             }
             
         }
-        // 모든 과정 끝내고서 스택이 비어 있어야 올바른 문장!!!!!!!!
+        // // 모든 과정 끝내고서 스택이 비어 있어야 올바른 문장!!!!!!!!
         if(stack.isEmpty()){
             return count;
         }
         return 0;
+        // return count;
     }
     
     public static char matching(char c){
