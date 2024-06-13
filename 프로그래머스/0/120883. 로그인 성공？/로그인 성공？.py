@@ -1,0 +1,12 @@
+def solution(id_pw, db):
+    answer = ''
+    for id_, pw in db:
+        if id_ == id_pw[0]:
+            # id 같으면
+            if pw == id_pw[1]:
+                # pw도 같으면
+                return "login"
+            else:
+                return "wrong pw"
+        
+    return "fail"
