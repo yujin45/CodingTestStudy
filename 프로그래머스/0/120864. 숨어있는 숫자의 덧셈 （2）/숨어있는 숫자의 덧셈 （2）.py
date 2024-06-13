@@ -9,5 +9,5 @@ def solution(my_string):
         else:
             num_list.append(int(num))
             num = '0'
-    num_list.append(int(num))
+    num_list.append(int(num)) # 마지막에 숫자 올 경우 처리
     return sum(num_list)
