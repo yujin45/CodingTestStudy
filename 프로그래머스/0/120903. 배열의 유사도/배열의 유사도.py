@@ -1,8 +1,4 @@
 def solution(s1, s2):
-    answer = 0
+    # 중복이 없다는 것에 포인트 => set
     
-    for s11 in s1:
-        for s22 in s2:
-            if s11 == s22:
-                answer+=1
-    return answer
+    return len(set(s1) & set(s2))
