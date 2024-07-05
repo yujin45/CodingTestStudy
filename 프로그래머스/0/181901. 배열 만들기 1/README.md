@@ -1,10 +1,10 @@
 # [level 0] 배열 만들기 1 - 181901 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/181901?language=kotlin) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/181901) 
 
 ### 성능 요약
 
-메모리: 59.9 MB, 시간: 8.36 ms
+메모리: 61.8 MB, 시간: 9.61 ms
 
 ### 구분
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2024년 07월 05일 21:34:51
+2024년 07월 05일 21:37:47
 
 ### 문제 설명
 
