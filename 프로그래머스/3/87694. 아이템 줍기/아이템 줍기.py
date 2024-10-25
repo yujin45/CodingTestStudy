@@ -12,7 +12,7 @@ def solution(rectangle, characterX, characterY, itemX, itemY):
     col = (max_y + 1) * 2
     
     maps = [[0] * col for _ in range(row)]
-    
+    #print(max_x, max_y, len(maps), len(maps[0]))
     def print_maps():
         for row in maps:
             print(" ".join(f"{elem:2}" for elem in row))
@@ -39,8 +39,9 @@ def solution(rectangle, characterX, characterY, itemX, itemY):
                 maps[x1][j] = 1
             if maps[x2][j] != -1:
                 maps[x2][j] = 1
-
+    
     #print_maps()
+    
 
     # BFS 탐색을 위해 시작 지점과 목표 지점을 2배 확장하여 설정
     start_x, start_y = characterX * 2, characterY * 2
@@ -54,7 +55,8 @@ def solution(rectangle, characterX, characterY, itemX, itemY):
         x, y = queue.popleft()
         
         if (x, y) == (target_x, target_y):
-            return maps[x][y] // 2  # 2배 확장한 좌표이므로 // 2
+            #print_maps()
+            return maps[x][y]// 2  # 2배 확장한 좌표이므로 // 2
 
         for dx, dy in directions:
             nx, ny = x + dx, y + dy
@@ -62,5 +64,5 @@ def solution(rectangle, characterX, characterY, itemX, itemY):
             if 0 <= nx < row and 0 <= ny < col and maps[nx][ny] == 1:
                 maps[nx][ny] = maps[x][y] + 1
                 queue.append((nx, ny))
-
+    
     return answer
