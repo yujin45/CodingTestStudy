@@ -1,8 +1,15 @@
 class Solution {
     fun solution(num_list: IntArray, n: Int): IntArray {
-        // 다른 사람 풀이
-        return (num_list + num_list).copyOfRange(n, n + num_list.size)
-        // 내 풀이
-        return (num_list.slice(n until num_list.size) + num_list.slice(0 until n)).toIntArray()
+        val ret = IntArray(num_list.size)
+        for (i in num_list.indices) {
+            if (i < n) {
+                // 앞부분을 뒤로 이동
+                ret[num_list.size - n + i] = num_list[i]
+            } else {
+                // 뒷부분을 앞으로 이동
+                ret[i - n] = num_list[i]
+            }
+        }
+        return ret
     }
 }
