@@ -1,10 +1,10 @@
 # [level 0] n 번째 원소까지 - 181889 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/181889?language=kotlin) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/181889) 
 
 ### 성능 요약
 
-메모리: 64 MB, 시간: 29.16 ms
+메모리: 64.6 MB, 시간: 0.02 ms
 
 ### 구분
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2024년 07월 05일 21:06:16
+2024년 12월 20일 21:07:47
 
 ### 문제 설명
 
