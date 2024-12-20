@@ -1,8 +1,10 @@
 class Solution {
     fun solution(num_list: IntArray, n: Int): IntArray {
-        // 다른 사람 풀이
-        return num_list.filterIndexed { index, _ -> index % n == 0 }.toIntArray()
-        // 내 풀이
-        return num_list.toList().chunked(n).map{it.first()}.toIntArray()
+        val len = if(num_list.size % n == 0){
+            num_list.size / n
+        }else{
+            num_list.size /n + 1
+        }
+        return IntArray(len){num_list[it*n]}
     }
 }
