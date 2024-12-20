@@ -1,3 +1,5 @@
+
+
 class Solution {
     fun solution(arr: IntArray, query: IntArray): IntArray {
         var answer: IntArray = arr.clone()
