@@ -1,10 +1,10 @@
 # [level 0] 전국 대회 선발 고사 - 181851 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/181851?language=python3) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/181851?language=kotlin) 
 
 ### 성능 요약
 
-메모리: 10.1 MB, 시간: 0.03 ms
+메모리: 66 MB, 시간: 25.92 ms
 
 ### 구분
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2024년 12월 23일 20:22:59
+2024년 12월 23일 20:48:13
 
 ### 문제 설명
 
