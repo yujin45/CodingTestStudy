@@ -1,8 +1,11 @@
 import java.math.BigInteger
+
+import java.math.*
+
 class Solution {
-    fun solution(a: String, b: String): String = StringBuilder().apply {
-        append(a.toBigInteger() + b.toBigInteger())
-    }.toString()
+    fun solution(a: String, b: String): String {
+        return BigDecimal(a).plus(BigDecimal(b)).toString()
+    }
 }
 class Solution2 {
     fun solution(a: String, b: String): String {
