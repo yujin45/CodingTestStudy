@@ -18,3 +18,18 @@ class Solution {
         return list.toIntArray()
     }
 }
+
+// import java.util.*
+
+// class Solution {
+//     fun solution(arr: IntArray, flag: BooleanArray): Stack<Int> {
+//         val stack = Stack<Int>()
+
+//         for (i in arr.indices) {
+//             for (j in 0 until arr[i] * if (flag[i]) 2 else 1) {
+//                 if (flag[i]) stack.push(arr[i]) else stack.pop()
+//             }
+//         }
+//         return stack
+//     }
+// }
