@@ -1,4 +1,4 @@
-class Solution {
+class Solution1 {
     fun solution(n: Int): Array<IntArray> {
         val map = Array<IntArray>(n){
             IntArray(n)
@@ -28,6 +28,37 @@ class Solution {
                 cx = cx + direction[directIndex].first
                 cy = cy + direction[directIndex].second
             }
+        }
+        
+        return map
+    }
+}
+
+
+class Solution {
+    fun solution(n: Int): Array<IntArray> {
+        val map = Array(n) { IntArray(n) }
+        val direction = arrayOf(
+            intArrayOf(0, 1),  // →
+            intArrayOf(1, 0),  // ↓
+            intArrayOf(0, -1), // ←
+            intArrayOf(-1, 0)  // ↑
+        )
+        
+        var x = 0
+        var y = 0
+        var dir = 0
+        for (count in 1..n * n) {
+            map[x][y] = count
+            val nx = x + direction[dir][0]
+            val ny = y + direction[dir][1]
+
+            // 방향 전환 조건: 범위 초과 또는 이미 방문한 경우
+            if (nx !in 0 until n || ny !in 0 until n || map[nx][ny] != 0) {
+                dir = (dir + 1) % 4 // 방향 전환
+            }
+            x += direction[dir][0]
+            y += direction[dir][1]
         }
         
         return map
