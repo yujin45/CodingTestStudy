@@ -16,17 +16,16 @@ fun main() {
         name_num[name] = i
     }
 
-
-    for(i in 0 until m){
+    repeat(m){
         val userInput = br.readLine()
-        userInput.toIntOrNull()?.let {
-            sb.append(num_name[userInput.toInt()])
-            sb.append('\n')
-        } ?: run{
-            sb.append(name_num[userInput])
-            sb.append('\n')
+        if(userInput[0].isDigit()){
+            // 첫번째 글자만 숫자인지 판단해줘도 됨
+            sb.append(num_name[userInput.toInt()]).append('\n')
+        }else{
+            sb.append(name_num[userInput]).append('\n')
         }
     }
+
     bw.write(sb.toString())
     br.close()
     bw.flush()
