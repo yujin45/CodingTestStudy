@@ -4,7 +4,7 @@ input = sys.stdin.readline
 
 N, M = map(int, input().split())
 
-my_dict = dict()
+my_dict = {}
 
 for i in range(1, N+1):
     name = input().strip()
