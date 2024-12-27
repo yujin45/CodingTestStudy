@@ -1,8 +1,6 @@
-
 fun main() {
     val br = System.`in`.bufferedReader()
     val bw = System.`out`.bufferedWriter()
-    val sb = StringBuilder()
 
     val n = br.readLine().toInt()
     val set = HashSet<String>()
@@ -14,12 +12,11 @@ fun main() {
             set.remove(name)
         }
     }
-    
-    val sortedList = set.sortedDescending()
-    for(name in sortedList){
-        sb.append(name).append("\n")
+
+    for(name in set.sortedDescending()){
+        bw.write(name)
+        bw.write("\n")
     }
-    bw.write(sb.toString())
     br.close()
     bw.flush()
     bw.close()
