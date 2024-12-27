@@ -1,21 +1,15 @@
 import sys
-from collections import defaultdict
+from collections import Counter
 input = sys.stdin.readline
 
-N = input()
-having = list(map(int, input().split()))
-
-having_dict = defaultdict(int)
-for h in having:
-    having_dict[h]+=1
-
+# 입력 처리
+_ = input()  # 첫 번째 입력 (N), 필요 없으므로 무시
+having = map(int, input().split())
 M = int(input().strip())
-check_cards = list(map(int, input().split()))
+check_cards = map(int, input().split())
 
-result = []
-for c in check_cards:
-    if c in having_dict:
-        result.append(having_dict[c])
-    else:
-        result.append(0)
-print(' '.join(map(str, result)))
+# 카운터 생성
+having_counter = Counter(having)
+
+# 결과 출력 (join 대신 직접 출력으로 메모리 절약)
+print(' '.join(str(having_counter[c]) for c in check_cards))
