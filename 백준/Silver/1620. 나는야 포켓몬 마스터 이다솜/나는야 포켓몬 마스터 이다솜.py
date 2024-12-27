@@ -1,18 +1,15 @@
 import sys
 input = sys.stdin.readline
 
-N, M = map(int, input().strip().split())
 
-num_name = dict()
-name_num = dict()
+N, M = map(int, input().split())
+
+my_dict = dict()
+
 for i in range(1, N+1):
     name = input().strip()
-    num_name[i] = name
-    name_num[name] = i
+    # 이름과 번호를 하나의 dict에서 다 관리
+    my_dict[str(i)] = name
+    my_dict[name] = str(i)
 
-for _ in range(M):
-    user_input = input().strip()
-    if user_input.isdigit():
-        print(num_name[int(user_input)])
-    else:
-        print(name_num[user_input])
+print('\n'.join([my_dict[input().strip()] for _ in range(M)]))
