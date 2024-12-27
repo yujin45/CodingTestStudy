@@ -2,13 +2,13 @@ import sys
 input = sys.stdin.readline
 
 n = int(input().strip())
-now = set()
-for i in range(n):
-    name, state = input().strip().split()
-    if state == "enter":
-        now.add(name)
+workingSet = set()
+for _ in range(n):
+    name, state = input().split()
+    if state =="enter":
+        workingSet.add(name)
     else:
-        now.remove(name)
+        workingSet.remove(name)
 
-for name in sorted(now, reverse= True):
-    print(name)
+sortedList = sorted(workingSet, reverse = True)
+print("\n".join(sortedList))
