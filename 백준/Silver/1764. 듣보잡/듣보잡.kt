@@ -17,9 +17,13 @@ fun main() {
         }
     }
     ret.sort()
-    bw.write(ret.size.toString()+"\n")
-    bw.write(ret.joinToString("\n"))
+    sb.append(ret.size.toString()+"\n")
+    for(r in ret){
+        sb.append(r)
+        sb.append("\n")
+    }
 
+    bw.write(sb.toString())
     br.close()
     bw.flush()
     bw.close()
