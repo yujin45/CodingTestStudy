@@ -1,17 +1,25 @@
 fun main() {
-    val str = readln() // 입력받은 문자열
-    val strSet = HashSet<String>() // 부분 문자열을 저장할 HashSet
-    var count = 0 // 부분 문자열의 개수
+    val br = System.`in`.bufferedReader()
+    val bw = System.`out`.bufferedWriter()
 
-    // step = substring 시 잘라낼 문자열의 크기
-    (1..str.length).forEach { step ->
-        // substring 시 인덱스를 초과하지 않게끔 length - step까지만 반복문을 돌린다.
-        for (index in 0..str.length - step)
-            strSet.add(str.substring(index, index + step))
-
-        count += strSet.size
-        strSet.clear()
+    val s = br.readLine()
+    val n = s.length
+    val hashSet = hashSetOf<String>()
+    var ret = 0
+    // STEP별로 잘라내기
+    for(step in 1..n){
+        // step = 1 ~ n개로 문자열 잘라내기
+        for(j in 0..n-step){
+            hashSet.add(s.substring(j, j+step))
+        }
+        // step에 해당하는 것 다 돌아서 다음 step 가기 전 횟수 저장 및 초기화
+        ret += hashSet.size
+        hashSet.clear()
     }
+    bw.write("$ret\n")
 
-    println(count)
+    bw.flush()
+    br.close()
+    bw.close()
+
 }
