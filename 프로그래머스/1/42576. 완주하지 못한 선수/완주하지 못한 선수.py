@@ -1,15 +1,13 @@
-import collections
 def solution(participant, completion):
-    answer = ''
-    # participant -1 = completion
-    # 동명이인 있을 수 있음
-    
-    participant_dict = collections.Counter(participant)
-    #print(participant_dict)
+    p_dict = {}
+    for p in participant:
+        p_dict[p] = p_dict.setdefault(p, 0) + 1
+
     for c in completion:
-        participant_dict[c]-=1
-    for k in participant_dict.keys():
-        if participant_dict[k] == 1:
-            answer = k
-    
-    return answer
+        if(p_dict[c] == 1):
+            del p_dict[c]
+        else:
+            p_dict[c] -=1
+    no_completion = list(p_dict.keys())
+
+    return no_completion[0]
