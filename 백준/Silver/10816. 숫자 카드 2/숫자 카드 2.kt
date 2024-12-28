@@ -6,13 +6,10 @@ fun main() {
     val n = br.readLine().toInt()
     val map = HashMap<String, Int>()
     val having = br.readLine().split(" ")
-    
+
     for(h in having){
-        if(map.containsKey(h)){
-            map[h] = map[h]!!.plus(1)
-        }else{
-            map[h] = 1
-        }
+        val cValue = map[h] ?: 0
+        map.put(h, cValue+1)
     }
 
     val m = br.readLine().toInt()
@@ -26,7 +23,7 @@ fun main() {
         }
     }
     bw.write(sb.toString())
-    
+
     br.close()
     bw.flush()
     bw.close()
