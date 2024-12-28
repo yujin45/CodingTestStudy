@@ -4,23 +4,23 @@ fun main() {
     val sb = StringBuilder()
 
     val (n, m) = br.readLine().split(" ").map { it.toInt() }
-    val ret = arrayListOf<String>()
-    val hashMap = HashMap<String, Int>()
+    val mset = mutableSetOf<String>()
+    val ret = mutableListOf<String>()
+
     for( i in 0 until n){
-        hashMap[br.readLine()] = 1
+        mset.add(br.readLine())
     }
 
     for(i in 0 until m){
         val name = br.readLine()
-        if(hashMap.containsKey(name)){
+        if(mset.contains(name)){
             ret.add(name)
         }
     }
     ret.sort()
-    sb.append(ret.size.toString()+"\n")
+    sb.append("${ret.size}\n")
     for(r in ret){
-        sb.append(r)
-        sb.append("\n")
+        sb.append("$r\n")
     }
 
     bw.write(sb.toString())
