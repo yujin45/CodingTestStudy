@@ -9,6 +9,7 @@ fun main() {
     }
     list.sortWith(compareBy({it.first}, {it.second}))
     for(l in list){
-        println("${l.first} ${l.second}")
+        sb.append("${l.first} ${l.second}\n")
     }
+    println(sb.toString())
 }
