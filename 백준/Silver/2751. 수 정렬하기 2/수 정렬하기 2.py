@@ -2,10 +2,5 @@ import sys
 input = sys.stdin.readline
 
 n = int(input())
-ret = []
-for _ in range(n):
-    ret.append(int(input()))
-ret.sort()
-
-for r in ret:
-    print(r)
+ret = [int(input().strip()) for _ in range(n)]
+print('\n'.join(map(str, sorted(ret))))
