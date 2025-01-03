@@ -1,21 +1,22 @@
 package org.example
 
+import java.util.Queue
+import java.util.LinkedList
+
 fun main() {
     val br = System.`in`.bufferedReader()
     val n = br.readLine().toInt()
-    val deque = mutableListOf<Int>()
-    repeat(n){
-        deque.add(it+1)
-    }
+    val queue: Queue<Int> = LinkedList()
     val sb = StringBuilder()
-    while(deque.isNotEmpty()){
-        sb.append("${deque.first()} ")
-        deque.removeFirst()
-        if(deque.isNotEmpty()){
-            val temp = deque.first()
-            deque.removeFirst()
-            deque.add(temp)
-        }
+
+    for(number in 1..n){
+        queue.offer(number)
     }
-    println(sb)
+
+    while(queue.isNotEmpty()){
+        sb.append("${queue.poll()} ")
+        if(queue.isEmpty()) break
+        queue.offer(queue.poll())
+    }
+    print(sb)
 }
