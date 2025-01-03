@@ -13,7 +13,7 @@ for _ in range(n):
         continue
     stack.clear()
     for char in user_input:
-        if len(stack)==0:
+        if not stack:
             stack.append(char)
         elif stack[-1] == char:
             stack.pop()
