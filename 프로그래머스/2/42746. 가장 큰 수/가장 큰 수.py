@@ -1,11 +1,6 @@
 from functools import cmp_to_key
 
 def solution(numbers):
-    numbers = list(map(str, numbers))
-    numbers.sort(key=lambda x: x*3, reverse=True)
-    return str(int(''.join(numbers)))
-
-def solution2(numbers):
     # Step 1: 정렬 기준 정의 (a+b, b+a 비교)
     def compare(a, b):
         if a+b >b+a:
