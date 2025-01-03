@@ -1,25 +1,24 @@
-import functools
-
-def comparator(a, b):
-    # 두 숫자를 문자열로 결합하여 두 가지 경우의 수를 만듭니다.
-    t1 = a + b  # 예: a = '3', b = '30'이라면 '330'이 됩니다.
-    t2 = b + a  # 예: a = '3', b = '30'이라면 '303'이 됩니다.
-    
-    # 두 가지 경우의 수를 정수로 변환하여 비교합니다.
-    # t1이 크면 1을 반환하고, t2가 크면 -1을 반환합니다.
-    # 두 경우가 같으면 0을 반환합니다.
-    return (int(t1) > int(t2)) - (int(t1) < int(t2))
+from functools import cmp_to_key
 
 def solution(numbers):
-    # 주어진 숫자 배열을 문자열 배열로 변환합니다.
-    n = [str(x) for x in numbers]
+    # Step 1: 정렬 기준 정의 (a+b, b+a 비교)
+    def compare(a, b):
+        if a+b >b+a:
+            return -1 # a가 b보다 앞에 와야 함
+        elif a+b < b+a:
+            return 1 # b가 a 보다 앞에 와야 함
+        else:
+            return 0 # 순서 상관없음
     
-    # comparator 함수를 이용하여 문자열 배열을 정렬합니다.
-    # reverse=True로 설정하여 내림차순으로 정렬합니다.
-    n = sorted(n, key=functools.cmp_to_key(comparator), reverse=True)
+    # Step 2: 숫자 배열을 문자열로 변환
+    numbers = list(map(str, numbers))
     
-    # 정렬된 문자열 배열을 다시 합쳐서 가장 큰 수를 만듭니다.
-    # 이를 정수로 변환하고 다시 문자열로 변환합니다.
-    answer = str(int(''.join(n)))
+    # Step 3: 사용자 정의 기준으로 정렬
+    sorted_numbers = sorted(numbers, key = cmp_to_key(compare))
     
-    return answer
+    # Step 4: 정렬된 숫자를 이어 붙여 결과 생성
+    result = ''.join(sorted_numbers)
+    
+    # Step 5: 모든 원소가 0일 경우 "0" 반환
+    return "0" if result[0] == "0" else result
+    
