@@ -1,6 +1,6 @@
 package org.example
 
-fun main(){
+fun main() {
     val br = System.`in`.bufferedReader()
     var stack = StringBuilder()
     val original = br.readLine()
@@ -8,13 +8,12 @@ fun main(){
     val boomSize = boom.length
     val boomLast = boom.last()
 
-    for(char in original){
+    for (char in original) {
         stack.append(char)
-        if(char == boomLast && stack.length >=boomSize){
-            if(stack.substring(stack.length-boomSize)==boom){
+        if (char == boomLast && stack.length >= boomSize) {
+            if (stack.substring(stack.length - boomSize) == boom) {
                 stack.delete(stack.length - boomSize, stack.length) // 슬라이싱 삭제
             }
-            
         }
     }
 
