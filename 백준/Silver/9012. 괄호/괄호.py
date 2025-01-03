@@ -1,29 +1,26 @@
-import sys
-from collections import deque
-input = sys.stdin.readline
 
-n = int(input())
-stack = deque()
-flag = False
-for _ in range(n):
-    input_list = input().strip()
-    for ps in input_list:
-        if ps == '(':
-            stack.append(ps)
-        elif ps == ')':
-            if not stack:
-                # 비어 있으면 바로 return
-                flag = True
-                break
-            if stack[-1] == '(':
-                stack.pop()
-            else:
-                stack.append(ps)
 
-    if len(stack) > 0 or flag:
-        print("NO")
-        stack.clear()
-        flag = False
-    else:
-        print("YES")
+def is_vps(ps):
+    stack = []
+    for char in ps:
+        if char == '(':
+            stack.append(char)
+        elif char == ')':
+            if not stack: # 닫는 괄호가 더 많음
+                return "NO"
+            stack.pop() # 여는 괄호 제거
+    return "YES" if not stack else "NO" # 스택 비어 있으면 YPS
 
+def solution():
+    import sys
+    input = sys.stdin.read
+    data = input().splitlines()
+
+    T = int(data[0])
+    results = []
+    for i in range(1, T+1):
+        results.append(is_vps(data[i]))
+
+    sys.stdout.write("\n".join(results) + "\n")
+
+solution()
