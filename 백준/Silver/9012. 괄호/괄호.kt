@@ -1,30 +1,33 @@
 
+
+import java.util.Stack
+
 fun main() {
     val br = System.`in`.bufferedReader()
     val sb = StringBuilder()
     val n = br.readLine().toInt()
 
-    var stack = mutableListOf<Char>()
-    for(i in 0 until n) {
+    for (i in 0 until n) {
         val ps = br.readLine()
+        val stack = Stack<Char>()  // Stack으로 변경
 
-        for(c in ps){
-            if (c == '('){
-                stack.add(c)
-            }else if(c==')'){
-                if(stack.isEmpty()){
-                    stack.add(c)
+        var isVPS = true
+        for (c in ps) {
+            if (c == '(') {
+                stack.push(c)  // addLast → push
+            } else if (c == ')') {
+                if (stack.isEmpty()) {  // isEmpty 동일
+                    isVPS = false
                     break
                 }
-                stack.removeLast()
+                stack.pop()  // removeLast → pop
             }
         }
 
-        if(stack.isNotEmpty()){
-            sb.append("NO\n")
-            stack.clear()
-        }else {
+        if (isVPS && stack.isEmpty()) {
             sb.append("YES\n")
+        } else {
+            sb.append("NO\n")
         }
     }
     print(sb)
