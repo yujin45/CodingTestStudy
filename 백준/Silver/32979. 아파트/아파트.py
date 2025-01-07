@@ -1,12 +1,11 @@
 import sys
-from collections import deque
 
 input = sys.stdin.readline
 
 # 입력 처리
 n = int(input())
 t = int(input())
-hand_apartment = deque(map(int, input().split()))
+hand_apartment = list(map(int, input().split()))
 b_calls = list(map(int, input().split()))
 
 # 결과 저장 리스트
