@@ -1,20 +1,27 @@
 import sys
 from collections import deque
+
 input = sys.stdin.readline
 
-n = int(input())  # 참가자 수
-t = int(input())  # 아파트 게임 횟수
-# 1 ~ n번 참가자 두 손 층층 아파트
-apt = list(map(int, input().split()))
-# t개의 양의 정수 b
-b_nums = list(map(int, input().split()))
+# 입력 처리
+n = int(input())
+t = int(input())
+hand_apartment = deque(map(int, input().split()))
+b_calls = list(map(int, input().split()))
 
-queue = deque(apt)
-ret = []
-for b in b_nums:
-    # 1판
-    for _ in range(b-1):
-        queue.append(queue.popleft())
-    ret.append(queue[0])
+# 결과 저장 리스트
+results = []
 
-print(' '.join(map(str, ret)))
+for b_j in b_calls:
+    # 패배자 위치 계산
+    idx = (b_j-1) % len(hand_apartment)
+    loser = hand_apartment[idx]
+    #print(idx, (b_j-1), len(hand_apartment), loser)
+    #결과 추가
+    results.append(loser)
+    # 손 아파트 회전
+    hand_apartment.rotate(-(b_j-1)) # 왼쪽으로 |n|칸 이동. 큐여서
+
+
+print(' '.join(map(str, results)))
+
