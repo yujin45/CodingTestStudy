@@ -4,7 +4,6 @@ from collections import deque
 input = sys.stdin.readline
 
 n = int(input())  # 1~n 정수 카드
-cards = deque(i for i in range(n, 0, -1))
 
 command = list(map(int, input().split()))
 ret = deque()
