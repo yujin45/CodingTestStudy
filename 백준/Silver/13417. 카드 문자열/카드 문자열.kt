@@ -21,7 +21,9 @@ fun main() {
                 ret.add(alphaList[i])
             }
         }
-        ret.forEach { sb.append(it) }
+        for (r in ret) {
+            sb.append(r)
+        }
         sb.append("\n")
     }
     print(sb)
