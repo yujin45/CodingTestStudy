@@ -1,41 +1,33 @@
-package org.example
+import java.util.ArrayDeque
+import java.util.LinkedList
 
 fun main() {
-    val br = System.`in`.bufferedReader()
+    val (n, m) = readLine()!!.split(" ").map { it.toInt() }
+    val targets = readLine()!!.split(" ").map { it.toInt() }
 
-    val (n, m) = br.readLine().split(" ").map { it.toInt() }
-    val checklist = br.readLine().split(" ").map { it.toInt() }
+    val queue = ArrayDeque((1..n).toList())
 
-    var total = 0
+    var totalOperations = 0
 
-    val queue = ArrayDeque<Int>()
-    (1..n).map { queue.add(it) }
+    for (target in targets) {
+        val targetIndex = queue.indexOf(target)
 
-    for (c in checklist) {
-        val targetIndex = queue.indexOf(c)
-        val leftmoves = targetIndex
-        val rightmoves = queue.size - targetIndex
+        // 왼쪽과 오른쪽 이동 거리 계산
+        val leftMoves = targetIndex
+        val rightMoves = queue.size - targetIndex
 
-        total += minOf(leftmoves, rightmoves)
-
-        if (leftmoves <= rightmoves) {
-            queue.rotateLeft(leftmoves)
+        // 최소 이동 거리 선택 및 큐 이동
+        if (leftMoves <= rightMoves) {
+            repeat(leftMoves) { queue.addLast(queue.removeFirst()) } // 왼쪽으로 이동
+            totalOperations += leftMoves
         } else {
-            queue.rotateRight(rightmoves)
+            repeat(rightMoves) { queue.addFirst(queue.removeLast()) } // 오른쪽으로 이동
+            totalOperations += rightMoves
         }
+
+        // 첫 번째 원소 제거
         queue.removeFirst()
     }
-    println(total)
-}
 
-fun <T> ArrayDeque<T>.rotateLeft(steps: Int) {
-    repeat(steps % this.size) {
-        this.addLast(this.removeFirst())
-    }
-}
-
-fun <T> ArrayDeque<T>.rotateRight(steps: Int) {
-    repeat(steps % this.size) {
-        this.addFirst(this.removeLast())
-    }
+    println(totalOperations)
 }
