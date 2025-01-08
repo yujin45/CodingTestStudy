@@ -1,5 +1,7 @@
 package org.example
 
+import java.util.ArrayDeque
+
 fun main() {
     val br = System.`in`.bufferedReader()
     val sb = StringBuilder()
@@ -11,17 +13,16 @@ fun main() {
 
         val ret = ArrayDeque<String>()
 
-        var minChar = alphaList[0]
-        ret.add(minChar)
+        ret.add(alphaList[0])
         for (i in 1 until n) {
-            if (minChar >= alphaList[i]) {
-                minChar = alphaList[i]
+            if (ret.first() >= alphaList[i]) {
                 ret.addFirst(alphaList[i])
             } else {
                 ret.add(alphaList[i])
             }
         }
-        sb.append("${ret.joinToString("")}\n")
+        ret.forEach { sb.append(it) }
+        sb.append("\n")
     }
     print(sb)
     br.close()
