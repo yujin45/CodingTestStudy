@@ -1,35 +1,30 @@
-import java.util.*
+package org.example
 
 fun main() {
-    val n = readLine()!!.toInt() // 컴퓨터 수
-    val m = readLine()!!.toInt() // 연결 정보 개수
-
-    val graph = Array(n + 1) { mutableListOf<Int>() } // 1-based index
-
+    val br = System.`in`.bufferedReader()
+    //
+    val n = br.readLine().toInt()
+    val m = br.readLine().toInt()
+    val graph = List(n + 1) { mutableListOf<Int>() }
     repeat(m) {
-        val (a, b) = readLine()!!.split(" ").map { it.toInt() }
+        val (a, b) = br.readLine().split(" ").map { it.toInt() }
         graph[a].add(b)
         graph[b].add(a)
     }
-
-    // BFS 탐색
     val visited = BooleanArray(n + 1)
-    val queue: Queue<Int> = LinkedList()
-    queue.add(1)
-    visited[1] = true
-
-    var infectedCount = 0
-
-    while (queue.isNotEmpty()) {
-        val current = queue.poll()
-        for (neighbor in graph[current]) {
-            if (!visited[neighbor]) {
-                visited[neighbor] = true
-                queue.add(neighbor)
-                infectedCount++
-            }
+    dfs(graph, 1, visited)
+    //bfs(graph, 1, visited)
+    println(visited.count { it } - 1)
+    //
+    br.close()
+}
+fun dfs(graph: List<MutableList<Int>>, start: Int, visited: BooleanArray) {
+    visited[start] = true
+    for (neighbor in graph[start]) {
+        if (!visited[neighbor]) {
+            // 방문전이면
+            dfs(graph, neighbor, visited)
         }
     }
-
-    println(infectedCount)
 }
+
