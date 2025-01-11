@@ -2,24 +2,20 @@ import sys
 
 sys.setrecursionlimit(10 ** 6)
 input = sys.stdin.readline
-isDone = False
-
 
 def dfs(graph, p1, p2, visited, count):
     ret = 0
     visited[p1] = True
-    global isDone
+
     if p1 == p2:
-        isDone = True
         return count
 
     for neighbor in graph[p1]:
         if not visited[neighbor]:
-            if not isDone:
-                ret = dfs(graph, neighbor, p2, visited, count + 1)
-            else:
-                return ret
-    return ret
+            result = dfs(graph, neighbor, p2, visited, count+1)
+            if result != -1: # 목표 노드에 도달한 경우
+                return result
+    return -1 # 목표 노드에 도달하지 못한 경우
 
 
 n = int(input())
@@ -34,5 +30,4 @@ for _ in range(m):
 
 count = 0
 ret = dfs(graph, p1, p2, visited, count)
-
-print(-1 if ret == 0 else ret)
+print(ret)
