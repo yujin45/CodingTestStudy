@@ -1,33 +1,30 @@
 import sys
-sys.setrecursionlimit(10000)
-# 정점과 간선
-N, M = map(int, input().split())
-# 인덱스 번호를 노드 번호로 사용
-graph = [[0]*(N+1) for _ in range(N+1)]
 
-for _ in range(M):
-    #간선 입력
-    a, b = map(int, input().split())
-    # 무방향 = 양방향으로 연결
-    graph[a][b] = graph[b][a] = 1
+sys.setrecursionlimit(10 ** 6)
+input = sys.stdin.readline
 
-# 인덱스 번호를 노드 번호로 사용
-visited = [0]*(N+1)
 
-def dfs(v):
-    # 방문 처리
-    visited[v] = 1
-    # 연결된 노드 확인하여 방문 x 연결o 노드에 대해 dfs 수행
-    for i in range(N+1):
-       if visited[i] == 0 and graph[v][i] == 1:
-           dfs(i)
-count = 0
-# 모든 노드 체크
-for i in range(1, N+1):
-    # 방문 안 한 곳에 대해 dfs 수행
-    if visited[i] == 0:
-        dfs(i)
-        count+=1
- 
-print(count)       
-    
+def dfs(graph, v, visited):
+    visited[v] = True
+    for neighbor in graph[v]:
+        if not visited[neighbor]:
+            dfs(graph, neighbor, visited)
+
+
+n, m = map(int, input().split())  # n: 정점 / m: 간선
+# 방향 없는 그래프 = 양방향
+# 인접 리스트로 진행
+graph = [[] for _ in range(n + 1)]  # 1~n번 정점 용도
+for _ in range(m):
+    u, v = map(int, input().split())
+    # 방향 없는 그래프 = 양방향
+    graph[u].append(v)
+    graph[v].append(u)
+
+visited = [False] * (n + 1)
+total_count = 0
+for v in range(1, n + 1):
+    if not visited[v]:
+        total_count += 1
+        dfs(graph, v, visited)
+print(total_count)
