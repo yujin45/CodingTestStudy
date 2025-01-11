@@ -1,39 +1,39 @@
 import sys
-sys.setrecursionlimit(10000000)
-T = int(input())
 
-count = 0
-def dfs(x, y):
-    # 여기에서 X는 행, Y는 열
-    if x <0 or y<0 or x>=N or y>=M:
-        return False
-    if graph[x][y] == 1:
-        # 배추 있으면 지렁이도 있음
-        # home+=1 이거랑 비슷한 문제
-        graph[x][y] = 0 # 체크했으니 0으로
-        dfs(x-1, y)
-        dfs(x+1, y)
-        dfs(x, y-1)
-        dfs(x, y+1)
-        return True
-    return False
+sys.setrecursionlimit(10 ** 6)
+input = sys.stdin.readline
 
-for _ in range(T):
-    M, N, K = map(int, input().split())
-    #열, 행, 배추 위치 개수
-    graph = [[0]*(M) for _ in range(N)]
+t = int(input())
+dx = [-1, 1, 0, 0]
+dy = [0, 0, -1, 1]
 
 
-    for _ in range(K):
+def dfs(graph, x, y):
+    graph[x][y] = 2  # 방문
+
+    for i in range(4):
+        nx = x + dx[i]  # 행
+        ny = y + dy[i]  # 열
+        if 0 <= nx < n and 0 <= ny < m and graph[nx][ny] == 1:
+            dfs(graph, nx, ny)
+
+
+for _ in range(t):
+    m, n, k = map(int, input().split())  # 열, 행, 배추 위치 개수
+
+    graph = [[0] * m for _ in range(n)]
+
+    for _ in range(k):
+        # 가로 길이 m -> 열, x
+        # 세로 길이 n -> 행, y
         x, y = map(int, input().split())
-        # X(0 ≤ X ≤ M-1) 가로 열
-        # y 행
-        graph[y][x] = 1 # 배추 심기
+        graph[y][x] = 1
 
-    count = 0
-    for i in range(N):
-        for j in range(M):
-            if dfs(i, j) == True:
-                # 지렁이 있는 곳
-                count+=1
-    print(count)
+    total_count = 0
+    for i in range(n):
+        for j in range(m):
+            if graph[i][j] == 1:
+                total_count += 1
+                dfs(graph, i, j)
+                
+    print(total_count)
