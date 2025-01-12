@@ -1,25 +1,17 @@
 package org.example
 
-
 val dx = listOf(-1, 1, 0, 0)
 val dy = listOf(0, 0, -1, 1)
 
-fun bfs(graph: Array<IntArray>, x: Int, y: Int, visited: Array<BooleanArray>, h: Int) {
-    val queue = ArrayDeque<Pair<Int, Int>>()
-    queue.add(x to y)
+fun dfs(graph: Array<IntArray>, x: Int, y: Int, visited: Array<BooleanArray>, h: Int) {
     visited[x][y] = true
-    while (queue.isNotEmpty()) {
-        val (cx, cy) = queue.removeFirst()
-        for (i in 0 until 4) {
-            val nx = cx + dx[i]
-            val ny = cy + dy[i]
-            if (nx in 0 until graph.size && ny in 0 until graph[0].size && !visited[nx][ny] && graph[nx][ny] > h) {
-                queue.add(nx to ny)
-                visited[nx][ny] = true
-            }
+    for (i in 0 until 4) {
+        val nx = x + dx[i]
+        val ny = y + dy[i]
+        if (nx in 0 until graph.size && ny in 0 until graph[0].size && !visited[nx][ny] && graph[nx][ny] > h) {
+            dfs(graph, nx, ny, visited, h)
         }
     }
-    queue.clear()
 }
 
 fun main() {
@@ -36,7 +28,7 @@ fun main() {
         for (i in 0 until n) {
             for (j in 0 until n) {
                 if (!visited[i][j] && graph[i][j] > h) {
-                    bfs(graph, i, j, visited, h)
+                    dfs(graph, i, j, visited, h)
                     count++
                     //println("h: $h - i : $i - j : $j - count : $count")
                 }
