@@ -4,13 +4,14 @@ val dx = intArrayOf(-1, 1, 0, 0)
 val dy = intArrayOf(0, 0, -1, 1)
 
 fun dfs(graph: Array<IntArray>, x: Int, y: Int, visited: Array<BooleanArray>, h: Int) {
+    if (!(x in 0 until graph.size) || !(y in 0 until graph[0].size) || visited[x][y] || graph[x][y] <= h) {
+        return
+    }
     visited[x][y] = true
     for (i in 0 until 4) {
         val nx = x + dx[i]
         val ny = y + dy[i]
-        if (nx in 0 until graph.size && ny in 0 until graph[0].size && !visited[nx][ny] && graph[nx][ny] > h) {
-            dfs(graph, nx, ny, visited, h)
-        }
+        dfs(graph, nx, ny, visited, h)
     }
 }
 
