@@ -18,11 +18,10 @@ fun main() {
     val br = System.`in`.bufferedReader()
     val n = br.readLine().toInt()
     val graph = Array(n) { br.readLine().split(" ").map { it.toInt() }.toIntArray() }
-    val min_height = graph.flatMap { it.toList() }.min()
     val max_height = graph.flatMap { it.toList() }.max()
     //println("Min: $min_height, Max: $max_height")
-    var ret = 0
-    for (h in (min_height - 1) until max_height) {
+    var ret = 1
+    for (h in 1 until max_height) {
         val visited = Array(n) { BooleanArray(n) }
         var count = 0
         for (i in 0 until n) {
