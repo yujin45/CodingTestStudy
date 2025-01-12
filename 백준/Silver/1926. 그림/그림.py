@@ -1,34 +1,41 @@
 import sys
+from collections import deque
+
 input = sys.stdin.readline
-sys.setrecursionlimit(10**7)
-dx = [-1, 1, 0, 0]
-dy = [0, 0, -1, 1]
 
-def dfs(graph, x, y):
+directions = [
+    [-1, 0],
+    [1, 0],
+    [0, -1],
+    [0, 1],
+]
+
+
+def bfs(graph, x, y):
+    queue = deque([(x, y)])
+    graph[x][y] = 2  # 방문 표시
     count = 1
-    graph[x][y] = 2
-
-    for i in range(4):
-        nx = x + dx[i]
-        ny = y + dy[i]
-        if 0 <= nx < len(graph) and 0 <= ny < len(graph[0]) and graph[nx][ny] == 1:
-            count += dfs(graph, nx, ny)
-
+    while queue:
+        cx, cy = queue.popleft()
+        for (dx, dy) in directions:
+            nx = cx + dx
+            ny = cy + dy
+            if 0 <= nx < len(graph) and 0 <= ny < len(graph[0]) and graph[nx][ny] == 1:
+                queue.append((nx, ny))
+                graph[nx][ny] = 2
+                count += 1
     return count
 
 
 n, m = map(int, input().split())  # 행, 열
 graph = [list(map(int, input().split())) for _ in range(n)]
 
-ret = []
+ret_count = 0
+ret_max = 0
 for i in range(n):
     for j in range(m):
         if graph[i][j] == 1:
-            ret.append(dfs(graph, i, j))
-
-if ret:
-    print(len(ret))
-    print(max(ret))
-else:
-    print(0)
-    print(0)
+            ret_max = max(ret_max, bfs(graph, i, j))
+            ret_count += 1
+print(ret_count)
+print(ret_max)
