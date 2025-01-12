@@ -21,14 +21,16 @@ graph = []
 for _ in range(n):
     graph.append(list(map(int, input().split())))
 
-high = set()
-for i in range(n):
-    for j in range(n):
-        high.add(graph[i][j])
+# high = set()
+# for i in range(n):
+#     for j in range(n):
+#         high.add(graph[i][j])
+
+max_high = max(map(max, graph))
 
 max_ret = 1
 # 내리는 비의 양을 다 조사
-for h in high:
+for h in range(max_high):
     # h이하는 잠김 => h 초과인 애들은 안전지대
     visited = [[False] * n for _ in range(n)]
     safe_area = 0
