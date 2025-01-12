@@ -1,6 +1,6 @@
 import sys
+from collections import deque
 
-sys.setrecursionlimit(10 ** 6)
 input = sys.stdin.readline
 
 directions = [
@@ -10,13 +10,17 @@ directions = [
 ]
 
 
-def dfs(graph, x, y):
+def bfs(graph, x, y):
+    queue = deque([(x, y)])
     graph[x][y] = 2  # 방문 표시
-    for (dx, dy) in directions:
-        nx = x + dx
-        ny = y + dy
-        if 0 <= nx < len(graph) and 0 <= ny < len(graph[0]) and graph[nx][ny] == 1:
-            dfs(graph, nx, ny)
+    while queue:
+        cx, cy = queue.popleft()
+        for (dx, dy) in directions:
+            nx = cx + dx
+            ny = cy + dy
+            if 0 <= nx < len(graph) and 0 <= ny < len(graph[0]) and graph[nx][ny] == 1:
+                queue.append((nx, ny))
+                graph[nx][ny] = 2
 
 
 # 행 m, 열 n
@@ -29,7 +33,7 @@ count = 0
 for i in range(m):
     for j in range(n):
         if graph[i][j] == 1:
-            dfs(graph, i, j)
+            bfs(graph, i, j)
             count += 1
 
 print(count)
