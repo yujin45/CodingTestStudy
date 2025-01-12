@@ -1,7 +1,7 @@
 package org.example
 
-val dx = listOf(-1, 1, 0, 0)
-val dy = listOf(0, 0, -1, 1)
+val dx = intArrayOf(-1, 1, 0, 0)
+val dy = intArrayOf(0, 0, -1, 1)
 
 fun dfs(graph: Array<IntArray>, x: Int, y: Int, visited: Array<BooleanArray>, h: Int) {
     visited[x][y] = true
