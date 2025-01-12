@@ -1,7 +1,12 @@
 package org.example
 
-val dx = intArrayOf(-1, 1, 0, 0)
-val dy = intArrayOf(0, 0, -1, 1)
+private val directions = arrayOf(
+    intArrayOf(-1, 0),
+    intArrayOf(0, 1),
+    intArrayOf(1, 0),
+    intArrayOf(0, -1)
+)
+
 
 fun dfs(graph: Array<IntArray>, x: Int, y: Int, visited: Array<BooleanArray>, h: Int) {
     if (!(x in 0 until graph.size) || !(y in 0 until graph[0].size) || visited[x][y] || graph[x][y] <= h) {
@@ -9,8 +14,8 @@ fun dfs(graph: Array<IntArray>, x: Int, y: Int, visited: Array<BooleanArray>, h:
     }
     visited[x][y] = true
     for (i in 0 until 4) {
-        val nx = x + dx[i]
-        val ny = y + dy[i]
+        val nx = x + directions[i][0]
+        val ny = y + directions[i][1]
         dfs(graph, nx, ny, visited, h)
     }
 }
