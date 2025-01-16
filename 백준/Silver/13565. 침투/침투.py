@@ -1,41 +1,35 @@
 import sys
+sys.setrecursionlimit(1000010)
 
-sys.setrecursionlimit(10 ** 6)
-input = sys.stdin.readline
+def dfs(r, c, l, m, n, vis):
+    if r == m - 1:
+        return "YES"
+    
+    vis[r][c] = 1
 
-# 0 행에서 마지막 행까지 도달 했는지를 판단해야 함
-dx = [-1, 1, 0, 0]
-dy = [0, 0, -1, 1]
-
-
-def dfs(graph, x, y):
-    isYes = False
-    graph[x][y] = 1  # 방문 표시
-    if x == len(graph) - 1:
-        # 최하단 도달
-        return True
+    dr = [1, 0, -1, 0]
+    dc = [0, 1, 0, -1]
 
     for i in range(4):
-        nx = x + dx[i]
-        ny = y + dy[i]
-        if 0 <= nx < len(graph) and 0 <= ny < len(graph[0]) and graph[nx][ny] == 0:
-            graph[nx][ny] = 1
-            if not isYes:
-                isYes = dfs(graph, nx, ny)
+        nr = r + dr[i]
+        nc = c + dc[i]
+        if (0 <= nr < m and 0 <= nc < n and 
+            l[nr][nc] == '0' and not vis[nr][nc]):
+            if dfs(nr, nc, l, m, n, vis) == "YES":
+                return "YES"
+    
+    return "NO"
 
-    return isYes
-
-
-m, n = map(int, input().split())
-graph = [list(map(int, input().strip())) for _ in range(m)]
-
-if 0 not in graph[0]:
+def main():
+    m, n = map(int, input().split())
+    l = [input() for _ in range(m)]
+    vis = [[0] * n for _ in range(m)]
+    for j in range(n):
+        if l[0][j] == '0' and not vis[0][j]:
+            if dfs(0, j, l, m, n, vis) == "YES":
+                print("YES")
+                exit(0)
     print("NO")
-    exit()
-
-for j in range(n):
-    if graph[0][j] == 0:
-        if dfs(graph, 0, j):
-            print("YES")
-            exit()
-print("NO")
+    
+if __name__ == '__main__':
+    main()
