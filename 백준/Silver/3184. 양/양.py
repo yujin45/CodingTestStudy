@@ -41,24 +41,20 @@ def bfs(graph, start_x, start_y):
             elif nx < 0 or nx >= len(graph) or ny < 0 or ny >= len(graph[0]):
                 return 0, 0
     if wolf >= sheep:
-        sheep = 0
+        return 0, wolf
     elif wolf < sheep:
-        wolf = 0
-
-    return sheep, wolf
+        return sheep, 0
 
 
 r, c = map(int, input().split())  # 행 열
 
-graph = []
-for _ in range(r):
-    graph.append(list(input()))
+graph = [list(map(str, input().strip())) for _ in range(r)]
 
 total_wolf = 0
 total_sheep = 0
 for i in range(r):
     for j in range(c):
-        if graph[i][j] != '#':
+        if graph[i][j] == 'o' or graph[i][j] == 'v':
             sheep, wolf = bfs(graph, i, j)
             total_wolf += wolf
             total_sheep += sheep
