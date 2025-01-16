@@ -9,7 +9,6 @@ dy = [0, 0, -1, 1]
 
 
 def dfs(graph, x, y, color, visited):
-    count = 1
     visited[x][y] = 1
 
     for i in range(4):
@@ -17,8 +16,7 @@ def dfs(graph, x, y, color, visited):
         ny = y + dy[i]
         if 0 <= nx < len(graph) and 0 <= ny < len(graph[0]) and graph[nx][ny] in color and not visited[nx][ny]:
             visited[nx][ny] = 1
-            count += dfs(graph, nx, ny, color, visited)
-    return count
+            dfs(graph, nx, ny, color, visited)
 
 
 # 뭔가 한번에 돌면서 가능할 것 같기도 하지만 잘 모르겠으므로 그냥 전부 탐색 2회 돌아보겠음
