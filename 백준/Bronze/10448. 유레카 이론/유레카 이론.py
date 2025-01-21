@@ -23,14 +23,11 @@ def check(k):
             for h in range(len(nums)):
                 ksum = nums[i] + nums[j] + nums[h]
                 if ksum == k:
-                    return True
+                    return 1
 
-    return False
+    return 0
 
 
 for _ in range(t):
     k = int(input().strip())
-    if check(k):
-        print(1)
-    else:
-        print(00)
+    print(check(k))
