@@ -1,12 +1,16 @@
 import sys
 
 input = sys.stdin.readline
-num = int(input())
-# n은 45보다 작거나 같은 자연수
-dp = [0] * 46
-dp[1] = 1
-dp[2] = 1
-for i in range(3, num + 1):
-    dp[i] = dp[i - 1] + dp[i -2]
 
-print(dp[num])
+
+def fib(num):
+    if dp[num] == -1:  # 한번도 연산된 적이 없다면
+        dp[num] = fib(num - 1) + fib(num - 2)
+    return dp[num]
+
+
+num = int(input())
+dp = [-1] * 46
+dp[0] = 0
+dp[1] = 1
+print(fib(num))
