@@ -4,6 +4,7 @@ fun main() {
     val br = System.`in`.bufferedReader()
     val sb = StringBuilder()
     val (n, m) = br.readLine().split(" ").map { it.toInt() }
+    // 중복 순열
     val sequence = IntArray(m)
 
     fun backtrack(depth: Int) {
@@ -18,6 +19,7 @@ fun main() {
         }
     }
     backtrack(0)
+    //
     print(sb)
     br.close()
 }
