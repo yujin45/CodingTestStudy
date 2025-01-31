@@ -8,7 +8,8 @@ fun main() {
 
     fun backtrack(depth: Int) {
         if (depth == m) {
-            sb.append("${sequence.joinToString(" ")}\n")
+            sequence.forEach { sb.append("$it ") }
+            sb.append("\n")
             return
         }
         for (i in 1..n) {
