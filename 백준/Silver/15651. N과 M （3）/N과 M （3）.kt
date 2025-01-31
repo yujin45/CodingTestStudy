@@ -4,20 +4,19 @@ fun main() {
     val br = System.`in`.bufferedReader()
     val sb = StringBuilder()
     val (n, m) = br.readLine().split(" ").map { it.toInt() }
-    val sequence = mutableListOf<Int>()
+    val sequence = IntArray(m)
 
-    fun backtrack() {
-        if (sequence.size == m) {
+    fun backtrack(depth: Int) {
+        if (depth == m) {
             sb.append("${sequence.joinToString(" ")}\n")
             return
         }
         for (i in 1..n) {
-            sequence.add(i)
-            backtrack()
-            sequence.removeLast()
+            sequence[depth] = i
+            backtrack(depth + 1)
         }
     }
-    backtrack()
+    backtrack(0)
     print(sb)
     br.close()
 }
