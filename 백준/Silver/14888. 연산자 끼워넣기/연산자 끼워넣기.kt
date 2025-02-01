@@ -2,57 +2,46 @@ package org.example
 
 fun main() {
     val br = System.`in`.bufferedReader()
-    // 주어진 수는 순서가 바뀌지 않음
-    // 연산자의 조합만 바뀌는 것 + + - -, + +  - - 는 동일한 것으로 취급되는 것
-    // 앞에서 진행, 나눗셈 정수 나눗셈 몫만 취하기
-    // 음수 나누기 양수 -> 양수로 바꾼뒤 몫 가져와서 음수로 바꾸기
-    // 식의 결과가 최대, 최소
-
     val n = br.readLine().toInt()
     val numbers = br.readLine().split(" ").map { it.toInt() }
-    val operator = br.readLine().split(" ").map { it.toInt() }
-    //
-    // 덧셈, 뺄셈, 곱셈, 나눗셈
-    val operators = mutableListOf<Int>()
-    for (i in 0..3) {
-        repeat(operator[i]) {
-            operators.add(i)
-        }
-    }
-    //println(operators)
-    val visited = BooleanArray(operators.size)
-    val operatorSequence = IntArray(operators.size)
-    var minResult = Int.MAX_VALUE
+    val operatorCounts = br.readLine().split(" ").map { it.toInt() }.toMutableList()
+
     var maxResult = Int.MIN_VALUE
-    fun backtrack(depth: Int) {
-        if (depth == operators.size) {
-            // 연산하기
-            var temp = numbers[0]
-            for (i in operatorSequence.indices) {
-                when (operatorSequence[i]) {
-                    0 -> temp += numbers[i + 1]
-                    1 -> temp -= numbers[i + 1]
-                    2 -> temp *= numbers[i + 1]
-                    3 -> temp /= numbers[i + 1]
-                }
-            }
-            minResult = minOf(temp, minResult)
-            maxResult = maxOf(temp, maxResult)
-            //println("$minResult,$maxResult")
+    var minResult = Int.MAX_VALUE
+
+    // DFS 탐색: index는 현재 numbers의 인덱스, current는 지금까지 계산 결과
+    fun dfs(index: Int, current: Int) {
+        if (index == n) {
+            maxResult = maxOf(maxResult, current)
+            minResult = minOf(minResult, current)
             return
         }
-        var lastUsed = -1
-        for (i in operators.indices) {
-            if (!visited[i] && lastUsed != operators[i]) {
-                visited[i] = true
-                operatorSequence[depth] = operators[i]
-                lastUsed = operators[i]
-                backtrack(depth + 1)
-                visited[i] = false
+
+        for (i in 0 until 4) {
+            if (operatorCounts[i] > 0) { // 연산자가 남아 있는 경우 사용
+                operatorCounts[i]-- // 연산자 개수 줄이고
+
+                val nextNumber = numbers[index]
+                val newResult = when (i) {
+                    0 -> current + nextNumber
+                    1 -> current - nextNumber
+                    2 -> current * nextNumber
+                    3 -> {
+                        if (current < 0) {
+                            -(-current / nextNumber)
+                        } else {
+                            current / nextNumber
+                        }
+                    }
+
+                    else -> current
+                }
+                dfs(index + 1, newResult)
+                operatorCounts[i]++ // 연산자 개수 복구 (백트래킹)
             }
         }
     }
-    backtrack(0)
+    dfs(1, numbers[0])
     println("$maxResult\n$minResult")
     br.close()
 }
