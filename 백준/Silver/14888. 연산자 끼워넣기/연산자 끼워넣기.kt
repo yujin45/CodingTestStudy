@@ -1,8 +1,22 @@
+package org.example
+
+import java.util.StringTokenizer
+
 fun main() {
     val br = System.`in`.bufferedReader()
+
     val n = br.readLine().toInt()
-    val numbers = br.readLine().split(" ").map { it.toInt() }
-    val operatorCounts = br.readLine().split(" ").map { it.toInt() }.toMutableList()
+    val stNumbers = StringTokenizer(br.readLine())
+    val numbers = IntArray(n)
+    for (i in 0 until n) {
+        numbers[i] = stNumbers.nextToken().toInt()
+    }
+
+    val stOperatorCounts = StringTokenizer(br.readLine())
+    val operatorCounts = IntArray(4)
+    for (i in 0 until 4) {
+        operatorCounts[i] = stOperatorCounts.nextToken().toInt()
+    }
 
     var maxResult = Int.MIN_VALUE
     var minResult = Int.MAX_VALUE
@@ -16,16 +30,22 @@ fun main() {
         }
 
         for (i in 0 until 4) {
-            if (operatorCounts[i] > 0) { // 연산자 남아 있을 때만 사용
-                operatorCounts[i]-- // 연산자 개수 줄이기
+            if (operatorCounts[i] > 0) { // 연산자가 남아 있는 경우 사용
+                operatorCounts[i]-- // 연산자 개수 줄이고
+
                 val nextNumber = numbers[index]
                 val newResult = when (i) {
                     0 -> current + nextNumber
                     1 -> current - nextNumber
                     2 -> current * nextNumber
                     3 -> {
-                        if (current < 0) -(-current / nextNumber) else current / nextNumber
+                        if (current < 0) {
+                            -(-current / nextNumber)
+                        } else {
+                            current / nextNumber
+                        }
                     }
+
                     else -> current
                 }
                 dfs(index + 1, newResult)
@@ -33,10 +53,7 @@ fun main() {
             }
         }
     }
-
     dfs(1, numbers[0])
-
-    println(maxResult)
-    println(minResult)
+    println("$maxResult\n$minResult")
     br.close()
 }
