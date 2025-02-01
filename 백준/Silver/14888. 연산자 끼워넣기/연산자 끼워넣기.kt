@@ -1,5 +1,3 @@
-package org.example
-
 fun main() {
     val br = System.`in`.bufferedReader()
     val n = br.readLine().toInt()
@@ -18,22 +16,16 @@ fun main() {
         }
 
         for (i in 0 until 4) {
-            if (operatorCounts[i] > 0) { // 연산자가 남아 있는 경우 사용
-                operatorCounts[i]-- // 연산자 개수 줄이고
-
+            if (operatorCounts[i] > 0) { // 연산자 남아 있을 때만 사용
+                operatorCounts[i]-- // 연산자 개수 줄이기
                 val nextNumber = numbers[index]
                 val newResult = when (i) {
                     0 -> current + nextNumber
                     1 -> current - nextNumber
                     2 -> current * nextNumber
                     3 -> {
-                        if (current < 0) {
-                            -(-current / nextNumber)
-                        } else {
-                            current / nextNumber
-                        }
+                        if (current < 0) -(-current / nextNumber) else current / nextNumber
                     }
-
                     else -> current
                 }
                 dfs(index + 1, newResult)
@@ -41,7 +33,10 @@ fun main() {
             }
         }
     }
+
     dfs(1, numbers[0])
-    println("$maxResult\n$minResult")
+
+    println(maxResult)
+    println(minResult)
     br.close()
 }
