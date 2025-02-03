@@ -1,15 +1,17 @@
+package org.example
 
 fun main() {
     val br = System.`in`.bufferedReader()
-
+    val sb = StringBuilder()
     val n = br.readLine().toInt()
-    val vocaSet = hashSetOf<String>()
-
-    repeat(n){
-        vocaSet.add(br.readLine())
+    // 중복 단어 제거 필요
+    val hashSet = HashSet<String>()
+    repeat(n) {
+        hashSet.add(br.readLine())
     }
-
-    val sortedList = vocaSet.toList().sortedWith(compareBy({it.length}, {it}))
-
-    sortedList.forEach{println(it)}
+    hashSet.sortedWith(compareBy({ it.length }, { it })).forEach {
+        sb.append("$it\n")
+    }
+    println(sb)
+    br.close()
 }
