@@ -4,17 +4,15 @@ package org.example
 fun main() {
     val br = System.`in`.bufferedReader()
     val word = br.readLine().uppercase()
-    val map = hashMapOf<Char, Int>()
-    // 빈도수 count
-    for (w in word) {
-        map[w] = map.getOrDefault(w, 0) + 1
+    val freq = IntArray(26)
+
+    for (char in word) {
+        freq[char - 'A']++
     }
 
-    // 최대 value
-    val maxValue = map.values.maxOrNull()
-    val maxKeys = map.filterValues { it == maxValue }.keys
-    // 여러개이면 ? 하나면 KEY
-    println(if (maxKeys.size > 1) "?" else maxKeys.first())
+    val maxValue = freq.maxOrNull() ?: 0
+    val maxCount = freq.count { it == maxValue }
+    println(if (maxCount > 1) "?" else ('A' + freq.indexOf(maxValue)))
 
     br.close()
 }
