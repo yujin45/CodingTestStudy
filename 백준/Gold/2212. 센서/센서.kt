@@ -1,10 +1,13 @@
 package org.example
 
+import java.util.StringTokenizer
+
 fun main() {
     val br = System.`in`.bufferedReader()
     val n = br.readLine().toInt()
     val k = br.readLine().toInt()
-    val sensors = br.readLine().split(" ").map { it.toInt() }.sorted()
+    val st = StringTokenizer(br.readLine())
+    val sensors = IntArray(n) { st.nextToken().toInt() }.sorted()
 
     // ★ 만약 k>= n이면 모든 센서를 커버하는 집중국이 가능하므로 비용 = 0
     if (k >= n) {
