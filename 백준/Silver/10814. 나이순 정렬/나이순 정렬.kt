@@ -1,19 +1,18 @@
+package org.example
 
 fun main() {
     val br = System.`in`.bufferedReader()
     val sb = StringBuilder()
     val n = br.readLine().toInt()
-    val people = mutableListOf<Pair<Int, String>>() // 나이 이름
-    
+    val people = mutableListOf<Pair<Int, String>>()
     repeat(n) {
         val (age, name) = br.readLine().split(" ")
         people.add(age.toInt() to name)
     }
-    
-    people.sortWith(compareBy({it.first})) // 나이만 정렬하고 같으면 기존 순서 유지
-    
-    for((age, name) in people){
-        sb.append("$age $name\n")
+    people.sortWith(compareBy({ it.first }))
+    for ((age, name) in people) {
+        sb.append(age).append(" ").append(name).append("\n")
     }
-    print(sb)
+    println(sb)
+    br.close()
 }
