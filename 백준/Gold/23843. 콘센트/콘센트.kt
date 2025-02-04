@@ -1,24 +1,19 @@
-package org.example
-
 import java.util.PriorityQueue
 
 fun main() {
     val br = System.`in`.bufferedReader()
-    // n개 충전 // 사용 가능 m개
-    // 최소 시간
     val (n, m) = br.readLine().split(" ").map { it.toInt() }
-    val needTime = br.readLine().split(" ").map { it.toInt() }.sortedDescending()
+    val needTime = br.readLine().split(" ").map { it.toInt() }
 
-    val pq = PriorityQueue<Int>()
-    for (time in needTime) {
-        if (pq.size >= m) {
-            pq.add(pq.poll() + time)
-        } else {
-            pq.add(time)
-        }
-        //println(pq)
+    val pq = PriorityQueue<Int>() // 최소 힙 (가장 적게 걸린 충전 시간이 우선)
+    
+    // m개의 콘센트 초기 세팅
+    repeat(m) { pq.add(0) } 
+
+    for (time in needTime.sortedDescending()) { 
+        val minTime = pq.poll() // 가장 빨리 끝나는 콘센트 가져오기
+        pq.add(minTime + time)  // 새로운 기기 충전 후 다시 큐에 추가
     }
-    println(pq.max())
 
-    br.close()
+    println(pq.maxOrNull()) // 가장 오래 걸리는 충전 시간 출력
 }
