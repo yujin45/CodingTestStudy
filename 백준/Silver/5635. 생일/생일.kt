@@ -2,20 +2,16 @@ package org.example
 
 import java.util.StringTokenizer
 
+data class Birthday(val name: String, val day: Int, val month: Int, val year: Int)
+
 fun main(args: Array<String>) {
     val br = System.`in`.bufferedReader()
-    val sb = StringBuilder()
     val n = br.readLine().toInt()
-    val birthdays = ArrayList<Array<Any>>()
-    for (i in 0 until n) {
+    val birthdays = Array<Birthday>(n) {
         val st = StringTokenizer(br.readLine())
-        birthdays.add(arrayOf(st.nextToken(), st.nextToken().toInt(), st.nextToken().toInt(), st.nextToken().toInt()))
+        Birthday(st.nextToken(), st.nextToken().toInt(), st.nextToken().toInt(), st.nextToken().toInt())
     }
-
-    val sortedBirthdays =
-        birthdays.sortedWith(compareBy<Array<Any>>({ -(it[3] as Int) }, { -(it[2] as Int) }, { -(it[1] as Int) }))
-   
-
-    println("${sortedBirthdays[0][0]}\n${sortedBirthdays[n - 1][0]}")
+    birthdays.sortWith(compareBy({ it.year }, { it.month }, { it.day }))
+    println("${birthdays[n - 1].name}\n${birthdays[0].name}")
     br.close()
 }
