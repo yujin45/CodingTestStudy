@@ -1,13 +1,17 @@
 package org.example
 
+import java.util.StringTokenizer
 
 fun main(args: Array<String>) {
     val br = System.`in`.bufferedReader()
     val n = br.readLine().toInt()
-    val lines = Array(n) {
-        val (x, y) = br.readLine().split(" ").map { it.toInt() }
-        (x to y)
-    }.sortedBy { it.first }
+    val lines = ArrayList<Pair<Int, Int>>()
+    for (i in 0 until n) {
+        val st = StringTokenizer(br.readLine())
+        lines.add(st.nextToken().toInt() to st.nextToken().toInt())
+    }
+    lines.sortBy { it.first }
+
     // 시작점 기준으로 정렬해주고
 
     var nowStart = lines[0].first
