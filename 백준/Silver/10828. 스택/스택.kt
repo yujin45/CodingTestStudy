@@ -1,48 +1,51 @@
+package org.example
 
+import java.util.StringTokenizer
 
-import java.util.Stack
-
-fun main() {
+fun main(args: Array<String>) {
     val br = System.`in`.bufferedReader()
     val sb = StringBuilder()
     val n = br.readLine().toInt()
+    val stack = mutableListOf<Int>()
+    repeat(n) {
+        val st = StringTokenizer(br.readLine())
+        when (st.nextToken()) {
+            "push" -> {
+                stack.add(st.nextToken().toInt())
+            }
 
-    val stack = Stack<String>()
+            "pop" -> {
+                if (stack.isNotEmpty()) {
+                    sb.append(stack.removeLast())
+                } else {
+                    sb.append(-1)
+                }
+                sb.append("\n")
+            }
 
-    for(i in 0 until n){
-        val commands = br.readLine()
-        when{
-            commands.startsWith("push") -> {
-                val (_, num) = commands.split(" ")
-                stack.push(num)
+            "size" -> {
+                sb.append(stack.size).append("\n")
             }
-            commands.startsWith("pop") -> {
-                if(stack.isEmpty()){
-                    sb.append("-1\n")
-                }else{
-                    sb.append("${stack.pop()}\n")
+
+            "empty" -> {
+                if (stack.isEmpty()) {
+                    sb.append(1)
+                } else {
+                    sb.append(0)
                 }
+                sb.append("\n")
             }
-            commands.startsWith("size")->{
-                sb.append("${stack.size}\n")
-            }
-            commands.startsWith("empty")->{
-                if(stack.isEmpty()){
-                    sb.append("1\n")
-                }else{
-                    sb.append("0\n")
+
+            "top" -> {
+                if (stack.isNotEmpty()) {
+                    sb.append(stack.last())
+                } else {
+                    sb.append(-1)
                 }
-            }
-            commands.startsWith("top")->{
-                if (stack.isEmpty()){
-                    sb.append("-1\n")
-                }else{
-                    sb.append("${stack.peek()}\n")
-                }
+                sb.append("\n")
             }
         }
-
     }
-    println(sb)
-
+    print(sb)
+    br.close()
 }
