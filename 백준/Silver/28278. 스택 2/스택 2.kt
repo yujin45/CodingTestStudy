@@ -1,44 +1,52 @@
+package org.example
 
-import java.util.Stack
+import java.util.StringTokenizer
 
-fun main(){
+fun main(args: Array<String>) {
     val br = System.`in`.bufferedReader()
     val sb = StringBuilder()
-    val n = br.readLine().toInt()
+    val stack = mutableListOf<Int>()
 
-    val stack = Stack<String>()
-    for(i in 0 until n){
-        val user_input = br.readLine()
-        when{
-            user_input.startsWith("1")->{
-                val (_, num) = user_input.split(" ")
-                stack.push(num)
+    val n = br.readLine().toInt()
+    repeat(n) {
+        val st = StringTokenizer(br.readLine())
+        when (st.nextToken()) {
+            "1" -> {
+                stack.add(st.nextToken().toInt())
             }
-            user_input.startsWith("2")->{
-                if(stack.isEmpty()){
-                    sb.append("-1\n")
-                }else {
-                    sb.append("${stack.pop()}\n")
+
+            "2" -> {
+                if (stack.isNotEmpty()) {
+                    sb.append(stack.removeLast())
+                } else {
+                    sb.append(-1)
                 }
+                sb.append("\n")
             }
-            user_input.startsWith("3")->{
-                sb.append("${stack.size}\n")
+
+            "3" -> {
+                sb.append(stack.size).append("\n")
             }
-            user_input.startsWith("4")->{
-                if (stack.isEmpty()){
-                    sb.append("1\n")
-                }else{
-                    sb.append("0\n")
+
+            "4" -> {
+                if (stack.isEmpty()) {
+                    sb.append(1)
+                } else {
+                    sb.append(0)
                 }
+                sb.append("\n")
             }
-            user_input.startsWith("5")->{
-                if(stack.isEmpty()){
-                    sb.append("-1\n")
-                }else{
-                    sb.append("${stack.peek()}\n")
+
+            "5" -> {
+                if (stack.isNotEmpty()) {
+                    sb.append(stack.last())
+                } else {
+                    sb.append(-1)
                 }
+                sb.append("\n")
             }
         }
     }
-    println(sb)
+    print(sb)
+    br.close()
 }
