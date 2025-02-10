@@ -1,30 +1,33 @@
 package org.example
 
+import java.util.StringTokenizer
+
 fun main() {
     val br = System.`in`.bufferedReader()
-    //
-    val n = br.readLine().toInt()
-    val m = br.readLine().toInt()
-    val graph = List(n + 1) { mutableListOf<Int>() }
-    repeat(m) {
-        val (a, b) = br.readLine().split(" ").map { it.toInt() }
+    val computerNum = br.readLine().toInt()
+    val edge = br.readLine().toInt()
+    val graph = Array(computerNum + 1) { mutableListOf<Int>() }
+    repeat(edge) {
+        val st = StringTokenizer(br.readLine())
+        val a = st.nextToken().toInt()
+        val b = st.nextToken().toInt()
+        // 양방향 서로 연결
         graph[a].add(b)
         graph[b].add(a)
     }
-    val visited = BooleanArray(n + 1)
-    dfs(graph, 1, visited)
-    //bfs(graph, 1, visited)
-    println(visited.count { it } - 1)
-    //
+    val visited = BooleanArray(computerNum + 1)
+    println(dfs(graph, 1, visited) - 1)
+
     br.close()
 }
-fun dfs(graph: List<MutableList<Int>>, start: Int, visited: BooleanArray) {
-    visited[start] = true
-    for (neighbor in graph[start]) {
+
+fun dfs(graph: Array<MutableList<Int>>, v: Int, visited: BooleanArray): Int {
+    visited[v] = true
+    var count = 1
+    for (neighbor in graph[v]) {
         if (!visited[neighbor]) {
-            // 방문전이면
-            dfs(graph, neighbor, visited)
+            count += dfs(graph, neighbor, visited)
         }
     }
+    return count
 }
-
