@@ -1,55 +1,70 @@
 package org.example
 
+import java.util.StringTokenizer
+
 fun main() {
     val br = System.`in`.bufferedReader()
-    val bw = System.out.bufferedWriter()
+    // dfs. bfs 탐색 결과 출력
+    // 번호 작은 것 먼저 방문
     val sb = StringBuilder()
-    //
-    val (n, m, v) = br.readLine().split(" ").map { it.toInt() }
-    val graph = MutableList(n + 1) { mutableListOf<Int>() }
-
-    repeat(m) {
-        val (a, b) = br.readLine().split(" ").map { it.toInt() }
+    val (N, M, V) = br.readLine().split(" ").map { it.toInt() }
+    var graph = Array(N + 1) { mutableListOf<Int>() } //0은 안 씀
+    val visited = BooleanArray(N + 1)
+    repeat(M) {
+        val st = StringTokenizer(br.readLine())
+        val a = st.nextToken().toInt()
+        val b = st.nextToken().toInt()
+        // 양방향 연결
         graph[a].add(b)
         graph[b].add(a)
     }
-    val visited = BooleanArray(n + 1)
+    // 정렬해주기
+    for (i in 0..N) {
+        graph[i].sort()
+    }
+    dfs(graph, visited, V, sb)
+    println(sb)
 
-    dfs(graph, v, visited, sb)
-    println(sb.trimEnd())
+
+    // bfs용도 초기화
     sb.clear()
-    bfs(graph, v, sb)
-    println(sb.trimEnd())
+    for (i in visited.indices) {
+        visited[i] = false
+    }
+
     //
+    bfs(graph, visited, V, sb)
+    println(sb)
     br.close()
-    bw.flush()
-    bw.close()
 }
 
-fun dfs(graph: List<MutableList<Int>>, v: Int, visited: BooleanArray, sb: StringBuilder) {
-    visited[v] = true
-    sb.append("$v ")
-    for (neighbor in graph[v].sorted()) {
+fun dfs(graph: Array<MutableList<Int>>, visited: BooleanArray, v: Int, sb: StringBuilder) {
+    visited[v] = true // 방문 표시하고
+    sb.append(v).append(" ")
+
+    for (neighbor in graph[v]) {
         if (!visited[neighbor]) {
-            dfs(graph, neighbor, visited, sb)
+            // 방문하지 않은 노드면 방문하기
+            dfs(graph, visited, neighbor, sb)
         }
     }
 }
 
-fun bfs(graph: List<MutableList<Int>>, start: Int, sb: StringBuilder) {
-    val visited = BooleanArray(graph.size)
+fun bfs(graph: Array<MutableList<Int>>, visited: BooleanArray, v: Int, sb: StringBuilder) {
+    visited[v] = true
+    sb.append(v).append(" ")
     val queue = ArrayDeque<Int>()
-    queue.add(start)
-    visited[start] = true
+    queue.addLast(v)
 
     while (queue.isNotEmpty()) {
-        val v = queue.removeFirst()
-        sb.append("$v ")
-        for (neighbor in graph[v].sorted()) {
+        val current = queue.removeFirst()
+        for (neighbor in graph[current]) {
             if (!visited[neighbor]) {
-                queue.add(neighbor)
+                queue.addLast(neighbor)
                 visited[neighbor] = true
+                sb.append(neighbor).append(" ")
             }
         }
     }
+
 }
