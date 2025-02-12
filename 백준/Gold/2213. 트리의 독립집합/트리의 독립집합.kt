@@ -36,6 +36,11 @@ fun main() {
 
     // 백트래킹을 이용해 실제 독립 집합 찾기
     val result = mutableListOf<Int>()
+    /*
+    * dp[neighbor][0]: neighbor 노드를 선택한 경우의 독립 집합 크기
+      dp[neighbor][1]: neighbor 노드를 선택하지 않은 경우의 독립 집합 크기
+      dp[neighbor][0]이 dp[neighbor][1]보다 크다면, neighbor를 선택하는 것이 더 유리하므로 select = true
+    * */
     trace(graph, 1, dp, parent, select = (dp[1][0] > dp[1][1]), result)
 
     // 정렬 후 출력
