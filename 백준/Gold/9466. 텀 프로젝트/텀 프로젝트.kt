@@ -14,23 +14,24 @@ fun main() {
             graph[i] = st.nextToken().toInt()
         }
         val visited = BooleanArray(n + 1)
-        val cycleSet = mutableSetOf<Int>()
+        var cycleSet = IntArray(1)
         for (i in 1..n) {
-            if (!visited[i]) dfs(graph, i, visited, mutableListOf(), cycleSet)
+            if (!visited[i]) {
+                dfs(graph, i, visited, mutableListOf(), cycleSet)
+            }
         }
         //println("$it 회차 : ${cycleSet.size} :$cycleSet")
-        sb.append(n - cycleSet.size).append("\n")
+        sb.append(n - cycleSet[0]).append("\n")
     }
     print(sb)
     br.close()
 }
 
-fun dfs(graph: IntArray, v: Int, visited: BooleanArray, path: MutableList<Int>, cycleSet: MutableSet<Int>) {
-    //println("v: $v -----")
+fun dfs(graph: IntArray, v: Int, visited: BooleanArray, path: MutableList<Int>, cycleSet: IntArray) {
+
     visited[v] = true // 방문 표시
     path.add(v)
     val next = graph[v] // 1:1 연결만 있으므로 이웃은 1개
-
     if (!visited[next]) { // 아직 방문 전이라면 방문하기
         dfs(graph, next, visited, path, cycleSet)
     } else { // 방문했던 곳이고 현재 지나온 path에 있으면 사이클 형성된 것!
@@ -39,10 +40,10 @@ fun dfs(graph: IntArray, v: Int, visited: BooleanArray, path: MutableList<Int>, 
         val cycleStart = path.indexOf(next)
         if (cycleStart != -1) { // -1이 아니면 사이클 형성, 사이클 찾고 이외의 것을 빼서 구하는 것
             //println("path: $path")
-            cycleSet.addAll(path.subList(cycleStart, path.size))
-            //println("next : $next")
-            //println("cycleSet: $cycleSet")
-            // 사이클 1팀 형성하는 것
+            visited[next] = true // 방문처리
+            for(i in cycleStart until path.size) {
+                cycleSet[0]++
+            }
         }
     }
 }
