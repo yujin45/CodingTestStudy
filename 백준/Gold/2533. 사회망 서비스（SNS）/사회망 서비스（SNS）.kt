@@ -1,12 +1,18 @@
 package org.example
 
+import java.util.StringTokenizer
+
 fun main() {
     val br = System.`in`.bufferedReader()
+
     val N = br.readLine().toInt()
     // 1~n번
     val graph = Array(N + 1) { mutableListOf<Int>() }
     repeat(N - 1) {
-        val (a, b) = br.readLine().split(" ").map { it.toInt() }
+        val st = StringTokenizer(br.readLine())
+        val a = st.nextToken().toInt()
+        val b = st.nextToken().toInt()
+        //val (a, b) = br.readLine().split(" ").map { it.toInt() }
         graph[a].add(b)
         graph[b].add(a)
     }
