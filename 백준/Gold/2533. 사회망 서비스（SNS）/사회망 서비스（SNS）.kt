@@ -1,32 +1,38 @@
-package org.example
+import java.io.*
 
 fun main() {
-    val br = System.`in`.bufferedReader()
+    val br = BufferedReader(InputStreamReader(System.`in`))
+    val bw = BufferedWriter(OutputStreamWriter(System.out))
     val N = br.readLine().toInt()
-    // 1~n번
-    val graph = Array(N + 1) { mutableListOf<Int>() }
+
+    val graph = Array(N + 1) { ArrayList<Int>() }
     repeat(N - 1) {
         val (a, b) = br.readLine().split(" ").map { it.toInt() }
         graph[a].add(b)
         graph[b].add(a)
     }
-    val visited = BooleanArray(N + 1)
-    val dp = Array(N + 1) { IntArray(2) { 0 } } // 선택, 미선택
-    dfs(graph, 1, visited, dp)
-    //println(dp.contentDeepToString())
-    println(minOf(dp[1][0], dp[1][1]))
+
+    val dp = Array(N + 1) { IntArray(2) }
+    val parent = IntArray(N + 1) { -1 }
+
+    dfs(1, graph, dp, parent)
+
+    bw.write("${minOf(dp[1][0], dp[1][1])}\n")
+    bw.flush()
     br.close()
+    bw.close()
 }
 
-fun dfs(graph: Array<MutableList<Int>>, v: Int, visited: BooleanArray, dp: Array<IntArray>) {
-    visited[v] = true
-    dp[v][0] = 1 //선택한 경우
-    dp[v][1] = 0 // 선택하지 않은 경우
-    for (neighbor in graph[v]) {
-        if (!visited[neighbor]) {
-            dfs(graph, neighbor, visited, dp)
-            dp[v][0] += minOf(dp[neighbor][0], dp[neighbor][1]) // 지금 v 선택하면 자식은 선택 작은 것으로
-            dp[v][1] += dp[neighbor][0] // 지금 v를 선택 안하면 자식은 선택해야 함
-        }
+fun dfs(node: Int, graph: Array<ArrayList<Int>>, dp: Array<IntArray>, parent: IntArray) {
+    dp[node][0] = 1  // 현재 노드를 얼리 아답터로 선택하는 경우
+    dp[node][1] = 0  // 현재 노드를 얼리 아답터로 선택하지 않는 경우
+
+    for (child in graph[node]) {
+        if (child == parent[node]) continue  // 부모 노드 방문 방지
+        parent[child] = node
+        dfs(child, graph, dp, parent)
+
+        dp[node][0] += minOf(dp[child][0], dp[child][1]) // 현재 선택 → 자식은 선택 or 비선택 가능
+        dp[node][1] += dp[child][0]  // 현재 미선택 → 자식은 반드시 선택
     }
 }
