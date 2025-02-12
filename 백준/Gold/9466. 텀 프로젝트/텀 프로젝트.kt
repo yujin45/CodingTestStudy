@@ -2,6 +2,8 @@ package org.example
 
 import java.util.StringTokenizer
 
+private var ret: Int = 0
+
 fun main() {
     val br = System.`in`.bufferedReader()
     val sb = StringBuilder()
@@ -14,36 +16,31 @@ fun main() {
             graph[i] = st.nextToken().toInt()
         }
         val visited = BooleanArray(n + 1)
-        var cycleSet = IntArray(1)
+        val finished = BooleanArray(n + 1) // dfs 탐색 끝난 노드
+        ret = 0
         for (i in 1..n) {
-            if (!visited[i]) {
-                dfs(graph, i, visited, mutableListOf(), cycleSet)
-            }
+            if (!visited[i]) dfs(graph, i, visited, finished)
         }
-        //println("$it 회차 : ${cycleSet.size} :$cycleSet")
-        sb.append(n - cycleSet[0]).append("\n")
+        sb.append(n - ret).append("\n") // 총 학생 수 - 팀을 이룬 학생 수
     }
     print(sb)
     br.close()
 }
 
-fun dfs(graph: IntArray, v: Int, visited: BooleanArray, path: MutableList<Int>, cycleSet: IntArray) {
-
+fun dfs(graph: IntArray, v: Int, visited: BooleanArray, finished: BooleanArray) {
     visited[v] = true // 방문 표시
-    path.add(v)
     val next = graph[v] // 1:1 연결만 있으므로 이웃은 1개
+
     if (!visited[next]) { // 아직 방문 전이라면 방문하기
-        dfs(graph, next, visited, path, cycleSet)
-    } else { // 방문했던 곳이고 현재 지나온 path에 있으면 사이클 형성된 것!
-        // path.indexOf(next) ~ path.size : 사이클
-        // 0 until path.indexOf(next) : 사이클 생기기 전 부분
-        val cycleStart = path.indexOf(next)
-        if (cycleStart != -1) { // -1이 아니면 사이클 형성, 사이클 찾고 이외의 것을 빼서 구하는 것
-            //println("path: $path")
-            visited[next] = true // 방문처리
-            for(i in cycleStart until path.size) {
-                cycleSet[0]++
-            }
+        dfs(graph, next, visited, finished)
+    } else if (!finished[next]) { // 사이클 발생인데 이미 이전에 탐색한 것 아니면
+        var count = 1
+        var i = next
+        while (i != v) {
+            count++
+            i = graph[i]
         }
+        ret += count
     }
+    finished[v] = true
 }
