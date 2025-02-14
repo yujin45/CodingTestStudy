@@ -32,7 +32,6 @@ class Solution {
             check.forEach{sb.append(it)}
             minLength = minOf(sb.length, minLength)
         }
-        minLength = minOf(minLength, s.length)
         return minLength
     }
 }
