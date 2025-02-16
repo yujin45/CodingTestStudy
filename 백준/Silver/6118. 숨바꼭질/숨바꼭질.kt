@@ -1,21 +1,21 @@
 package org.example
 
+import java.util.StringTokenizer
+
 fun main() {
     val br = System.`in`.bufferedReader()
     val (N, M) = br.readLine().split(" ").map { it.toInt() }
     val graph = Array(N + 1) { mutableListOf<Int>() }
     repeat(M) {
-        val (a, b) = br.readLine().split(" ").map { it.toInt() }
+        val st = StringTokenizer(br.readLine())
+        val a = st.nextToken().toInt()
+        val b = st.nextToken().toInt()
         graph[a].add(b)
         graph[b].add(a)
     }
-    dfs(graph, 1)
-    br.close()
-}
-
-fun dfs(graph: Array<MutableList<Int>>, start: Int) {
     val visited = BooleanArray(graph.size)
     val depth = 0
+    val start = 1
     val depthList = mutableListOf<Pair<Int, Int>>()
     visited[start] = true
     val queue = ArrayDeque<Pair<Int, Int>>()
@@ -44,4 +44,5 @@ fun dfs(graph: Array<MutableList<Int>>, start: Int) {
         }
     }
     println("$hideNum $hideDist $count")
+    br.close()
 }
