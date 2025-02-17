@@ -1,43 +1,29 @@
 package org.example
 
-data class Node(
-    val num: Int,
-    var depth: Int,
-)
-
 fun main() {
     val br = System.`in`.bufferedReader()
     val K = br.readLine().toInt()
 
     val treeList = br.readLine().split(" ").map { it.toInt() }
-    val tree = mutableListOf<Node>()
-    val sb = StringBuilder()
-    search(treeList, tree, 0)
-    tree.sortWith(compareBy<Node> { it.depth })
-    //println(tree)
-    var depth = 0
-
-    for (node in tree) {
-        if (node.depth > depth) {
-            sb.deleteCharAt(sb.length - 1)
-            sb.append("\n")
-            depth = node.depth
-        }
-        sb.append(node.num).append(" ")
-    }
-    sb.deleteCharAt(sb.length - 1).append("\n")
-    print(sb)
     br.close()
+
+    val levels = Array(K) { ArrayList<Int>() } // 깊이 별 노드 저장 리스트
+    buildTree(treeList, levels, 0, 0, treeList.size - 1)
+
+    val sb = StringBuilder()
+    for (level in levels) {
+        sb.append(level.joinToString(" ")).append("\n")
+    }
+    print(sb)
 }
 
-fun search(treeList: List<Int>, tree: MutableList<Node>, depth: Int) {
-    if (treeList.size == 1) {
-        //1개 남은거면 그냥 넣고 리턴
-        tree.add(Node(treeList[0], depth))
-        return
-    }
-    val mid = treeList.size / 2
-    tree.add(Node(treeList[mid], depth))
-    search(treeList.subList(0, mid), tree, depth + 1)
-    search(treeList.subList(mid + 1, treeList.size), tree, depth + 1)
+// 리스트 복사 대신 인덱스 범위 사용
+fun buildTree(treeList: List<Int>, levels: Array<ArrayList<Int>>, depth: Int, start: Int, end: Int) {
+    if (start > end) return
+
+    val mid = (start + end) / 2
+    levels[depth].add(treeList[mid]) // 해당 depth 에 추가
+
+    buildTree(treeList, levels, depth + 1, start, mid - 1) // 왼쪽 서브트리
+    buildTree(treeList, levels, depth + 1, mid + 1, end) // 오른쪽 서브트리
 }
