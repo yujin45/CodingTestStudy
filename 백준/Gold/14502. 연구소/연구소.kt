@@ -35,40 +35,50 @@ fun main() {
 
     //graph.forEach { println(it.contentToString()) }
     // 벽 3개를 세울 모든 경우의 수 탐색
-    combination(emptySpaces, 0, 0, mutableListOf())
+    combination(emptySpaces, 0, 0, mutableListOf(), virusPositions)
     println(maxSafeArea)
     br.close()
 }
 
 // 벽 3개 세울 조합 찾기 (백트래킹)
-fun combination(emptySpaces: List<Pair<Int, Int>>, start: Int, count: Int, selected: MutableList<Pair<Int, Int>>) {
+fun combination(
+    emptySpaces: List<Pair<Int, Int>>,
+    start: Int,
+    count: Int,
+    selected: MutableList<Pair<Int, Int>>,
+    virusPositions: List<Pair<Int, Int>>
+) {
     if (count == 3) {
         // 벽 3개를 모두 세웠다면
         val tempLab = graph.map { it.copyOf() }.toTypedArray() // 연구소 복사
         for ((x, y) in selected) tempLab[x][y] = 1 //벽 세우기
 
-        val safeArea = simulateVirus(tempLab) // 바이러스 퍼뜨리고 안전 영역 계산
+        val safeArea = simulateVirus(tempLab, virusPositions) // 바이러스 퍼뜨리고 안전 영역 계산
         maxSafeArea = maxOf(maxSafeArea, safeArea) // 최대 안전 영역 업데이트
         return
     }
 
     for (i in start until emptySpaces.size) {
         selected.add(emptySpaces[i])
-        combination(emptySpaces, i + 1, count + 1, selected)
+        combination(emptySpaces, i + 1, count + 1, selected, virusPositions)
         selected.removeAt(selected.lastIndex)
     }
 }
 
-fun simulateVirus(tempLab: Array<IntArray>): Int {
+fun simulateVirus(tempLab: Array<IntArray>, virusPositions: List<Pair<Int, Int>>): Int {
     val queue = ArrayDeque<Pair<Int, Int>>()
 
     // 초기 바이러스 위치 다 넣고 돌리기 = > 토마토 문제랑 유사하게 동시에 퍼뜨리기
-    for (i in 0 until N) {
-        for (j in 0 until M) {
-            if (tempLab[i][j] == 2) queue.add(i to j) //초기 바이러스 위치
-        }
-    }
+//    for (i in 0 until N) {
+//        for (j in 0 until M) {
+//            if (tempLab[i][j] == 2) queue.add(i to j) //초기 바이러스 위치
+//        }
+//    }
 
+    // 바이러스 위치 미리 넣어둔 것사용
+    for ((vx, vy) in virusPositions) {
+        queue.add(vx to vy)
+    }
     while (queue.isNotEmpty()) {
         val (cx, cy) = queue.removeFirst()
         for (i in 0 until 4) {
