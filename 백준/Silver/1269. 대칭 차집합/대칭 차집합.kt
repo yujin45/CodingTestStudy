@@ -1,21 +1,29 @@
+package org.example
+
+import java.util.StringTokenizer
+
 fun main() {
     val br = System.`in`.bufferedReader()
-    val bw = System.`out`.bufferedWriter()
-
-    val (a, b) = br.readLine().split(" ")
-    val aSet = HashSet<Int>(br.readLine().split(" ").map { it.toInt() })
-    val bSet = HashSet<Int>(br.readLine().split(" ").map { it.toInt() })
-
+    val (A, B) = br.readLine().split(" ").map { it.toInt() }
+    val stA = StringTokenizer(br.readLine())
+    val stB = StringTokenizer(br.readLine())
+    val aHashSet = HashSet<String>()
+    val bHashSet = HashSet<String>()
+    repeat(A) {
+        aHashSet.add(stA.nextToken())
+    }
+    repeat(B) {
+        bHashSet.add(stB.nextToken())
+    }
+    // 대칭 차집합 개수만 구하면 됨
     var count = 0
-    for(element in aSet){
-        if(element !in bSet) count++
+    for (e in aHashSet) {
+        if (!bHashSet.contains(e)) count++
     }
-    for(element in bSet){
-        if(element !in aSet) count++
+    // 아래처럼 하는 방법도 있음
+    for (e in bHashSet) {
+        if (e !in aHashSet) count++
     }
-    bw.write("$count")
-    bw.flush()
+    println(count)
     br.close()
-    bw.close()
-
 }
