@@ -1,32 +1,27 @@
+package org.example
+
 
 fun main() {
     val br = System.`in`.bufferedReader()
-    val bw = System.`out`.bufferedWriter()
     val sb = StringBuilder()
-
-    val (n, m) = br.readLine().split(" ").map{it.toInt()}
-
-    val num_name = mutableListOf<String>()
-    val name_num = HashMap<String, Int>()
-
-    for(i in 1..n){
+    val (N, M) = br.readLine().split(" ").map { it.toInt() }
+    // 포켓몬 수 n 맞출 m
+    val numberName = mutableListOf<String>()
+    val nameHashMap = HashMap<String, Int>()
+    for (number in 1..N) {
+        // 포켓몬 1번 ~ N번까지 들어옴
         val name = br.readLine()
-        num_name.add(name)
-        name_num[name] = i
+        numberName.add(name)
+        nameHashMap[name] = number
     }
-
-    repeat(m){
+    repeat(M) {
         val userInput = br.readLine()
-        if(userInput[0].isDigit()){
-            // 첫번째 글자만 숫자인지 판단해줘도 됨
-            sb.append(num_name[userInput.toInt()-1]).append('\n')
-        }else{
-            sb.append(name_num[userInput]).append('\n')
+        if (userInput[0].isDigit()) { // 첫번째 글자만 숫자인지 판단해줘도 됨
+            sb.append(numberName[userInput.toInt() - 1]).append("\n")
+        } else {
+            sb.append(nameHashMap.getValue(userInput)).append("\n")
         }
     }
-
-    bw.write(sb.toString())
+    print(sb)
     br.close()
-    bw.flush()
-    bw.close()
 }
