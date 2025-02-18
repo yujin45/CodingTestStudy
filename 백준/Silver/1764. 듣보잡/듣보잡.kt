@@ -1,30 +1,22 @@
+
 fun main() {
     val br = System.`in`.bufferedReader()
-    val bw = System.`out`.bufferedWriter()
     val sb = StringBuilder()
-
-    val (n, m) = br.readLine().split(" ").map { it.toInt() }
-    val mset = mutableSetOf<String>()
-    val ret = mutableListOf<String>()
-
-    for( i in 0 until n){
-        mset.add(br.readLine())
+    val (N, M) = br.readLine().split(" ").map { it.toInt() }
+    val notHear = HashSet<String>()
+    val notHearSee = mutableListOf<String>()
+    repeat(N) {
+        notHear.add(br.readLine())
     }
-
-    for(i in 0 until m){
-        val name = br.readLine()
-        if(mset.contains(name)){
-            ret.add(name)
+    repeat(M) {
+        val see = br.readLine()
+        if (notHear.contains(see)) {
+            notHearSee.add(see)
         }
     }
-    ret.sort()
-    sb.append("${ret.size}\n")
-    for(r in ret){
-        sb.append("$r\n")
-    }
-
-    bw.write(sb.toString())
+    notHearSee.sort()
+    sb.append(notHearSee.size).append("\n")
+    notHearSee.forEach { sb.append(it).append("\n") }
+    print(sb)
     br.close()
-    bw.flush()
-    bw.close()
 }
