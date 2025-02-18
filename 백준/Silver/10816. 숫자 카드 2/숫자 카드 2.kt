@@ -1,30 +1,30 @@
+package org.example
+
+import java.util.StringTokenizer
+
 fun main() {
     val br = System.`in`.bufferedReader()
-    val bw = System.`out`.bufferedWriter()
     val sb = StringBuilder()
-
-    val n = br.readLine().toInt()
-    val map = HashMap<String, Int>()
-    val having = br.readLine().split(" ")
-
-    for(h in having){
-        val cValue = map[h] ?: 0
-        map.put(h, cValue+1)
+    val N = br.readLine().toInt()
+    val stN = StringTokenizer(br.readLine())
+    // Int를 키값으로 둬도 되지만, 숫자로만 주어지므로 String으로 비교 가능
+    val hashMap = HashMap<String, Int>()
+    repeat(N) {
+        val num = stN.nextToken()
+        hashMap[num] = hashMap.getOrDefault(num, 0) + 1
     }
-
-    val m = br.readLine().toInt()
-    val checkCards = br.readLine().split(" ")
-    for(i in 0 until m){
-        if(map.containsKey(checkCards[i])){
-            sb.append(map[checkCards[i]])
-            sb.append(" ")
-        }else{
-            sb.append("0 ")
+    val M = br.readLine().toInt()
+    val stM = StringTokenizer(br.readLine())
+    repeat(M) {
+        val num = stM.nextToken()
+        if (hashMap.containsKey(num)) {
+            sb.append(hashMap.getValue(num)).append(" ")
+        } else {
+            sb.append(0).append(" ")
         }
-    }
-    bw.write(sb.toString())
 
+    }
+    sb.deleteCharAt(sb.length - 1)
+    println(sb)
     br.close()
-    bw.flush()
-    bw.close()
 }
