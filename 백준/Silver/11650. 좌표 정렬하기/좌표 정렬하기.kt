@@ -1,20 +1,24 @@
 package org.example
 
+import java.util.StringTokenizer
 
 fun main() {
     val br = System.`in`.bufferedReader()
+    val bw = System.`out`.bufferedWriter()
     val sb = StringBuilder()
-    val n = br.readLine().toInt()
-    val graph = Array(n) { IntArray(2) }
-    repeat(n) {
-        val (x, y) = br.readLine().split(" ").map { it.toInt() }
-        graph[it][0] = x
-        graph[it][1] = y
+    val N = br.readLine().toInt()
+    val points = mutableListOf<Pair<Int, Int>>()
+    repeat(N) {
+        val st = StringTokenizer(br.readLine())
+        points.add(st.nextToken().toInt() to st.nextToken().toInt())
     }
-    graph.sortedWith(compareBy({ it[0] }, { it[1] })).forEach {
-        sb.append(it[0]).append(" ").append(it[1]).append("\n")
-    }
-    println(sb)
-
+    points.sortedWith(compareBy<Pair<Int, Int>> { it.first }
+        .thenBy { it.second })
+        .forEach {
+            sb.append("${it.first} ${it.second}\n")
+        }
+    bw.write(sb.toString())
+    bw.flush()
+    bw.close()
     br.close()
 }
