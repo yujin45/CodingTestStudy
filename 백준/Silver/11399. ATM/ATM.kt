@@ -1,15 +1,20 @@
 package org.example
 
+import java.util.StringTokenizer
+
 fun main() {
     val br = System.`in`.bufferedReader()
-    val n = br.readLine().toInt()
-    // 1~n번
-    val p = br.readLine().split(" ").map { it.toInt() }.sorted()
-    var sum = 0
+    val N = br.readLine().toInt()
+    val st = StringTokenizer(br.readLine())
+    val arr = mutableListOf<Int>()
+    repeat(N){
+        arr.add(st.nextToken().toInt())
+    }
+    arr.sort()
     var result = 0
-    for (i in 0 until n) {
-        sum += p[i]
-        result += sum
+    //println(arr)
+    for(i in 0 until N){
+        result += arr[i]*(N-i)
     }
     println(result)
     br.close()
