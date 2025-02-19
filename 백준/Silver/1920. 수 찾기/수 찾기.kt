@@ -1,16 +1,25 @@
 package org.example
 
+import java.util.StringTokenizer
+
 fun main() {
     val br = System.`in`.bufferedReader()
+    val bw = System.`out`.bufferedWriter()
     val sb = StringBuilder()
-    val n = br.readLine().toInt()
-    val aList = br.readLine().split(" ").map { it.toInt() }.toHashSet()
-    val m = br.readLine().toInt()
-    val bList = br.readLine().split(" ").map { it.toInt() }
-    bList.forEach {
-        if (it in aList) sb.append(1) else sb.append(0)
-        sb.append("\n")
+    val N = br.readLine().toInt()
+    val stN = StringTokenizer(br.readLine())
+    val hashSet = HashSet<String>()
+    repeat(N) {
+        hashSet.add(stN.nextToken())
     }
-    println(sb)
+    val M = br.readLine().toInt()
+    val stM = StringTokenizer(br.readLine())
+    repeat(M) {
+        if (hashSet.contains(stM.nextToken())) sb.append(1).append("\n")
+        else sb.append(0).append("\n")
+    }
+    bw.write(sb.toString())
+    bw.flush()
+    bw.close()
     br.close()
 }
