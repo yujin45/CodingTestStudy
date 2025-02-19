@@ -1,17 +1,15 @@
-package org.example
-
 fun main() {
     val br = System.`in`.bufferedReader()
+    val N = br.readLine().toInt()
+    val arr = IntArray(N)
+    repeat(N) {
+        arr[it] = br.readLine().toInt()
+    }
+    arr.sort()
     val sb = StringBuilder()
-    val n = br.readLine().toInt()
-    val nums = IntArray(n)
-    repeat(n) {
-        nums[it] = br.readLine().toInt()
+    arr.forEach {
+        sb.append(it).append("\n")
     }
-    nums.sort()
-    nums.forEach {
-        sb.append("$it\n")
-    }
-    print(sb)
+    println(sb)
     br.close()
 }
