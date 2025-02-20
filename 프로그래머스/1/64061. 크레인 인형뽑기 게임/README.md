@@ -1,10 +1,10 @@
 # [level 1] 크레인 인형뽑기 게임 - 64061 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/64061) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/64061?language=kotlin) 
 
 ### 성능 요약
 
-메모리: 82 MB, 시간: 1.54 ms
+메모리: 64.1 MB, 시간: 8.86 ms
 
 ### 구분
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2024년 06월 04일 16:22:25
+2025년 02월 20일 22:22:21
 
 ### 문제 설명
 
