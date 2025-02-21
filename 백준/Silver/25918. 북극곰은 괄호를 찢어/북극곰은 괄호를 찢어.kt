@@ -4,24 +4,17 @@ import kotlin.math.abs
 
 fun main() {
     val br = System.`in`.bufferedReader()
-    val n = br.readLine().toInt()
-    val s = br.readLine()
+    val N = br.readLine().toInt()
+    val S = br.readLine()
 
     var needMinDay = 0
-    var total = 0
+    var total = 0 //괄호 균형 체크
 
-    for(c in s){
-        if(c == '('){
-            total++
-        }else if (c==')'){
-            total--
-        }
+    for (c in S) {
+        if (c == '(') total++
+        else total--
         needMinDay = maxOf(needMinDay, abs(total))
     }
-
-    if(total == 0){
-        println(needMinDay)
-    }else{
-        println(-1)
-    }
+    println(if (total == 0) needMinDay else -1)
+    br.close()
 }
