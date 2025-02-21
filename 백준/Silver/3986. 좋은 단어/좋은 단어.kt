@@ -1,24 +1,23 @@
 package org.example
 
-import java.util.Stack
-
-fun main(){
+fun main() {
     val br = System.`in`.bufferedReader()
-    val stack = Stack<Char>()
-    var ret = 0
-    val n = br.readLine().toInt()
-    repeat(n) {
-        val userInput = br.readLine()
+    var count = 0
 
-        if(userInput.length%2==1) return@repeat
-        stack.clear()
-        for(c in userInput){
-            if(stack.isEmpty()) stack.push(c)
-            else if(stack.peek() == c) stack.pop()
-            else stack.push(c)
+    val N = br.readLine().toInt()
+    for (i in 0 until N) {
+        val stack = mutableListOf<Char>()
+        val word = br.readLine()
+        if (word.length % 2 == 1) continue // 홀수개면 애초에 짝이 안 맞아서 측정 패스
+        for (w in word) {
+            if (stack.isNotEmpty() && stack.last() == w) {
+                stack.removeLast()
+            } else {
+                stack.add(w)
+            }
         }
-
-        if(stack.isEmpty()) ret++
+        if (stack.isEmpty()) count++
     }
-    println(ret)
+    println(count)
+    br.close()
 }
