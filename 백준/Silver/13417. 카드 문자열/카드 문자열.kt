@@ -1,31 +1,29 @@
 package org.example
 
-import java.util.ArrayDeque
+import java.util.StringTokenizer
 
 fun main() {
     val br = System.`in`.bufferedReader()
+    val T = br.readLine().toInt()
     val sb = StringBuilder()
-    val t = br.readLine().toInt()
-
-    repeat(t) {
-        val n = br.readLine().toInt()
-        val alphaList = br.readLine().split(" ")
-
-        val ret = ArrayDeque<String>()
-
-        ret.add(alphaList[0])
-        for (i in 1 until n) {
-            if (ret.first() >= alphaList[i]) {
-                ret.addFirst(alphaList[i])
+    repeat(T) {
+        val N = br.readLine().toInt()
+        val st = StringTokenizer(br.readLine())
+        val queue = ArrayDeque<String>()
+        queue.addLast(st.nextToken())
+        repeat(N - 1) {
+            val alphabet = st.nextToken()
+            if (alphabet <= queue.first()) {
+                queue.addFirst(alphabet)
             } else {
-                ret.add(alphaList[i])
+                queue.addLast(alphabet)
             }
         }
-        for (r in ret) {
-            sb.append(r)
-        }
+        queue.forEach { sb.append(it) }
         sb.append("\n")
     }
     print(sb)
     br.close()
 }
+
+
