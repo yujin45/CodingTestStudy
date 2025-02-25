@@ -1,42 +1,48 @@
 package org.example
 
-// 전역으로 두고 쓰려고 함
-val dx = listOf(-1, 1, 0, 0)
-val dy = listOf(0, 0, -1, 1)
-var count = 0
+import java.util.StringTokenizer
+
+private val dx = intArrayOf(-1, 1, 0, 0)
+private val dy = intArrayOf(0, 0, -1, 1)
+
 fun main() {
     val br = System.`in`.bufferedReader()
-    //
-    val n = br.readLine().toInt()
-    val graph = List(n) { br.readLine().map { it.digitToInt() }.toMutableList() }
-   
-    val homeCount = mutableListOf<Int>()
-    for (i in 0 until n) {
-        for (j in 0 until n) {
+    val N = br.readLine().toInt()
+    val graph = Array(N) {
+        br.readLine().map { it.digitToInt() }.toIntArray()
+    }
+
+    // 단지 번호 붙여서 단지 수
+    val homeCountList = mutableListOf<Int>()
+    for (i in graph.indices) {
+        for (j in graph[0].indices) {
             if (graph[i][j] == 1) {
-                homeCount.add(dfs(graph, i, j, n))
-                count = 0
+                homeCountList.add(dfs(graph, i, j))
             }
         }
     }
-    println(homeCount.size)
-    homeCount.sort()
-    println(homeCount.joinToString("\n"))
 
-    //
+    homeCountList.sort()
+
+    val sb = StringBuilder()
+    sb.append(homeCountList.size).append("\n")
+    homeCountList.forEach { sb.append(it).append("\n") }
+    print(sb)
+
     br.close()
 }
 
-fun dfs(graph: List<MutableList<Int>>, x: Int, y: Int, n: Int): Int {
-    graph[x][y] = 2 // 방문 처리
-    count++
+fun dfs(graph: Array<IntArray>, x: Int, y: Int): Int {
+    var count = 1
+    graph[x][y] = 0
+
     for (i in 0 until 4) {
         val nx = x + dx[i]
         val ny = y + dy[i]
-        if (nx in 0 until n && ny in 0 until n && graph[nx][ny] == 1) {
-            dfs(graph, nx, ny, n)
+        if (nx in graph.indices && ny in graph[0].indices && graph[nx][ny] == 1) {
+            count += dfs(graph, nx, ny)
         }
-
     }
+
     return count
 }
