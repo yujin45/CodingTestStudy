@@ -1,41 +1,38 @@
 package org.example
 
+import java.util.StringTokenizer
+
 fun main() {
     val br = System.`in`.bufferedReader()
+    // 루트 없는 트리 루트 1로 가정, 각 노드의 부모
+    val N = br.readLine().toInt()
+    val graph = Array(N + 1) { mutableListOf<Int>() }
+    repeat(N - 1) {
+        val st = StringTokenizer(br.readLine())
+        val u = st.nextToken().toInt()
+        val v = st.nextToken().toInt()
+        graph[u].add(v)
+        graph[v].add(u)
+    }
+
+    val visited = IntArray(N + 1)
+    visited[1] = -1 //루트 표시
+    dfs(graph, 1, visited)
+
     val sb = StringBuilder()
-    val bw = System.out.bufferedWriter()
-
-    val n = br.readLine().toInt()
-    val graph = Array(n + 1) { mutableListOf<Int>() }
-    val visited = BooleanArray(n + 1)
-    val parent = IntArray(n + 1)
-
-    repeat(n - 1) {
-        val (a, b) = br.readLine().split(" ").map { it.toInt() }
-        graph[a].add(b)
-        graph[b].add(a)
+    for (i in 2..N) {
+        sb.append(visited[i]).append("\n")
     }
-
-    for (v in 1..n - 1) {
-        if (!visited[v]) {
-            dfs(graph, v, visited, parent)
-        }
-    }
-
-    for (i in 2 until parent.size) {
-        sb.append("${parent[i]}\n")
-    }
-    bw.write(sb.toString())
-    bw.flush()
+    print(sb)
     br.close()
 }
 
-fun dfs(graph: Array<MutableList<Int>>, v: Int, visited: BooleanArray, parent: IntArray) {
-    visited[v] = true
+fun dfs(graph: Array<MutableList<Int>>, v: Int, visited: IntArray) {
     for (neighbor in graph[v]) {
-        if (!visited[neighbor]) {
-            parent[neighbor] = v
-            dfs(graph, neighbor, visited, parent)
+        if (visited[neighbor] == 0) {
+            // 방문 전이면
+            visited[neighbor] = v // 부모 넣어주고 다음 진행
+            dfs(graph, neighbor, visited)
         }
     }
 }
