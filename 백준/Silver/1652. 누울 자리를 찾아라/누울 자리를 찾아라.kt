@@ -1,46 +1,40 @@
 package org.example
 
-fun dfs(graph: Array<CharArray>, x: Int, y: Int, direction: Array<Pair<Int, Int>>): Int {
-    var count = 1
-    graph[x][y] = 'X'
-    for ((dx, dy) in direction) {
-        val nx = x + dx
-        val ny = y + dy
-        if (nx in graph.indices && ny in graph[0].indices && graph[nx][ny] == '.') {
-            count += dfs(graph, nx, ny, direction)
-        }
-    }
-    return count
-}
 
 fun main() {
     val br = System.`in`.bufferedReader()
+    val N = br.readLine().toInt()
+    val room = Array(N) { br.readLine() } // 문자열 배열로 입력 받기
 
-    val n = br.readLine().toInt()
-    val graphW = Array(n) { br.readLine().toCharArray() }
-    val graphH = Array(n) { graphW[it].copyOf() }
-  
-    val driectionW = arrayOf((0 to -1), (0 to 1))
-    val directionH = arrayOf((-1 to 0), (1 to 0))
-    var sleepW = 0
-    var sleepH = 0
-    for (i in 0 until n) {
-        for (j in 0 until n) {
-            if (graphW[i][j] == '.') {
-                if (dfs(graphW, i, j, driectionW) >= 2) {
-                    sleepW += 1
-                }
+    var horizontal = 0 // 가로 누울 자리 개수
+    var vertical = 0 // 세로 누울 자리 개수
+    // 가로 방향 탐색
+    for (i in 0 until N) {
+        var count = 0 // 연속된 빈 공간 개수
+        for (j in 0 until N) {
+            if (room[i][j] == '.') {
+                count++
+            } else {
+                if (count >= 2) horizontal++
+                count = 0
             }
-            if (graphH[i][j] == '.') {
-                if (dfs(graphH, i, j, directionH) >= 2) {
-                    sleepH += 1
-                }
-            }
-
         }
+        if (count >= 2) horizontal++ // 마지막 칸까지 빈 공간이면 체크
+    }
+    // 세로 방향 탐색
+    for (j in 0 until N) {
+        var count = 0
+        for (i in 0 until N) {
+            if (room[i][j] == '.') {
+                count++
+            } else {
+                if (count >= 2) vertical++
+                count = 0
+            }
+        }
+        if (count >= 2) vertical++ // 마지막 칸까지 빈 공간이면 체크
     }
 
-    println("$sleepW $sleepH")
-
+    println("$horizontal $vertical")
     br.close()
 }
