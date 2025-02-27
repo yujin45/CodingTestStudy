@@ -1,47 +1,43 @@
 package org.example
 
+
 fun main() {
     val br = System.`in`.bufferedReader()
-    val sb = StringBuilder()
 
-    val t = br.readLine().toInt()
-    val inputNums = IntArray(t)
-    for (i in inputNums.indices) {
-        inputNums[i] = br.readLine().toInt()
+    val trinum = IntArray(44)
+    for (i in 1..44) {
+        trinum[i - 1] = i * (i + 1) / 2
     }
 
-    var n = 1
-    var ret = 0
-    val nums = ArrayList<Int>()
-
-    while (true) {
-        ret = n * (n + 1) / 2
-        if (ret > 1000) {
-            break
-        }
-        nums.add(ret)
-        n++
-    }
-
-    for (input in inputNums) {
-        sb.append("${check(input, nums)}\n")
-    }
-
-    print(sb)
-    br.close()
-}
-
-fun check(k: Int, nums: ArrayList<Int>): Int {
-
-    for (i in nums) {
-        for (j in nums) {
-            for (h in nums) {
-                if ((i + j + h) == k) {
-                    return 1
-                }
+    val sequence = IntArray(3)
+    fun backtrack(depth: Int, target: Int): Boolean {
+        if (depth == 3) {
+            // 3개의 삼각수 합
+            //println(sequence.contentToString())
+            if (sequence.sum() == target) {
+                return true
+            } else {
+                return false
             }
         }
+
+        for (i in trinum.indices) {
+            sequence[depth] = trinum[i]
+            if (backtrack(depth + 1, target)) return true
+        }
+        return false
     }
 
-    return 0
+    val sb = StringBuilder()
+    val T = br.readLine().toInt()
+    repeat(T) {
+        val K = br.readLine().toInt()
+        if (backtrack(0, K)) {
+            sb.append("1\n")
+        } else {
+            sb.append("0\n")
+        }
+    }
+    print(sb)
+    br.close()
 }
