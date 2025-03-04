@@ -3,19 +3,25 @@ package org.example
 fun main() {
     val br = System.`in`.bufferedReader()
     val sb = StringBuilder()
-    val (n, m) = br.readLine().split(" ").map { it.toInt() }
-    // 중복 X, 1~n 중 m개 선택 수열, 오름차순
-    val sequence = IntArray(m) // m개 선택한 숫자 넣어지는 용도
-    val visited = BooleanArray(n + 1) // 중복 체크용도 1~n
+    val (N, M) = br.readLine().split(" ").map { it.toInt() }
+    // 1~N까지 자연수 중 중복 없이 M개 구하기
+    val sequence = IntArray(M) // M개 고를 배열
+    val visited = BooleanArray(N + 1) // 중복 없이, 0은 안 씀
 
     fun backtrack(depth: Int) {
-        if (depth == m) { // m개면 return
-            sequence.forEach { sb.append("$it ") }
+        if (depth == M) {
+            sequence.forEach {
+                sb.append(it).append(" ")
+            }
+            sb.deleteCharAt(sb.length - 1)
             sb.append("\n")
             return
         }
-        for (i in 1..n) { // 1부터 n까지
-            if (!visited[i]) { // 중복 X
+
+        for (i in 1..N) {
+            // 1~N까지의 수
+            if (!visited[i]) {
+                // 방문하지 않은 수라면
                 visited[i] = true
                 sequence[depth] = i
                 backtrack(depth + 1)
@@ -23,8 +29,8 @@ fun main() {
             }
         }
     }
-    backtrack(0)
-    //
+    backtrack(0) //0부터 시작
     print(sb)
+    
     br.close()
 }
