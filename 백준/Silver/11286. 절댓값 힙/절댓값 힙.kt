@@ -1,23 +1,22 @@
 package org.example
 
+import java.util.StringTokenizer
 import java.util.PriorityQueue
+import kotlin.math.abs
 import kotlin.math.absoluteValue
 
 fun main() {
     val br = System.`in`.bufferedReader()
+    val N = br.readLine().toInt()
+    val pq = PriorityQueue<Int>(compareBy<Int> { abs(it) }.thenBy { it })
     val sb = StringBuilder()
-    val pq = PriorityQueue<Int>(compareBy({ it.absoluteValue }, { it }))
-    val n = br.readLine().toInt()
-    repeat(n) {
-        val x = br.readLine().toInt()
-        if (x != 0) {
-            pq.add(x)
+    repeat(N) {
+        val num = br.readLine().toInt()
+        if (num == 0) {
+            if (pq.isNotEmpty()) sb.append(pq.poll()).append("\n")
+            else sb.append(0).append("\n")
         } else {
-            if (pq.isNotEmpty()) {
-                sb.append(pq.poll()).append("\n")
-            } else {
-                sb.append("0\n")
-            }
+            pq.add(num)
         }
     }
     print(sb)
