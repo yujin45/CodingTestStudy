@@ -1,26 +1,33 @@
 package org.example
 
 import java.util.StringTokenizer
+import java.util.PriorityQueue
 
 fun main() {
     val br = System.`in`.bufferedReader()
-    val n = br.readLine().toInt()
-    val k = br.readLine().toInt()
+    val N = br.readLine().toInt()
+    val K = br.readLine().toInt()
     val st = StringTokenizer(br.readLine())
-    val sensors = IntArray(n) { st.nextToken().toInt() }.sorted()
-
-    // ★ 만약 k>= n이면 모든 센서를 커버하는 집중국이 가능하므로 비용 = 0
-    if (k >= n) {
-        println(0)
-        return
+    val sensors = PriorityQueue<Int>()
+    repeat(N) {
+        sensors.add(st.nextToken().toInt())
     }
-    //println(sensors)
-    // n개의 센서 k개 집중국 - 유치원 문제와 비슷한듯함.
-    val diff = IntArray(n - 1)
-    for (i in 0 until n - 1) {
-        diff[i] = sensors[i + 1] - sensors[i]
+    //println("sensors: $sensors")
+    val pq = PriorityQueue<Int>(compareByDescending { it })
+    var front = sensors.poll()
+    repeat(N - 1) {
+        val back = sensors.poll()
+        pq.add(back - front)
+        front = back
     }
-    diff.sort()
-    println(diff.take(n - k).sum())
+    //println("pq: $pq")
+    repeat(K - 1) {
+        pq.poll()
+    }
+    var sum = 0
+    while (pq.isNotEmpty()) {
+        sum += pq.poll()
+    }
+    println(sum)
     br.close()
 }
