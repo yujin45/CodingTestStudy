@@ -1,21 +1,24 @@
 package org.example
 
+import java.util.StringTokenizer
 import java.util.PriorityQueue
 
-fun main(args: Array<String>) {
+data class Homework(val d: Int, val w: Int)
+
+fun main() {
     val br = System.`in`.bufferedReader()
     val n = br.readLine().toInt()
-    val homework = Array(n) {
-        val (d, w) = br.readLine().split(" ").map { it.toInt() }
-        d to w
-    }.sortedBy { it.first } // 마감일 기준 빠른 것부터 보기 위함
+    val homeworks = Array<Homework>(n) {
+        val st = StringTokenizer(br.readLine())
+        Homework(st.nextToken().toInt(), st.nextToken().toInt())
+    }.sortedBy { it.d } // 마감일 빠른 것 우선 보기 
+    val pq = PriorityQueue<Int>()
+    // 기간 내에 할 수 있는 일을 담아두고, 낮은 과제 우선 제거, pq의 사이즈가 곧 n일의 분량인 것!!
 
-    val pq = PriorityQueue<Int>() // 기간 내 할 수 있는 것들 중, 낮은 과제 제거용
-
-    for ((d, w) in homework) {
-        pq.add(w) // 현재 과제 추가
-        if (pq.size > d) {
-            // 지금 해낼 일들이 마감일을 넘어가면 과제 중 가장 낮은 것 빼기
+    for (homework in homeworks) {
+        pq.add(homework.w) // 현재 과제 추가
+        if (pq.size > homework.d) {
+            // 현재 과제의 데드라인이 n일을 넘어가면 과제 비용 낮은거 제거
             pq.poll()
         }
     }
