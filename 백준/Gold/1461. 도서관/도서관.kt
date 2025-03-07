@@ -22,14 +22,8 @@ fun main() {
         }
     }
 
-    val maxLen: Int
-    if (leftBooks.isNotEmpty() && rightBooks.isEmpty()) {
-        maxLen = leftBooks.first()
-    } else if (leftBooks.isEmpty() && rightBooks.isNotEmpty()) {
-        maxLen = rightBooks.first()
-    } else {
-        maxLen = if (leftBooks.first() > rightBooks.first()) leftBooks.first() else rightBooks.first()
-    }
+    val maxLen = if (leftBooks.firstOrNull() ?: 0 > rightBooks.firstOrNull() ?: 0) leftBooks.firstOrNull()
+        ?: 0 else rightBooks.firstOrNull() ?: 0
 
 
     var totalLen = -maxLen
