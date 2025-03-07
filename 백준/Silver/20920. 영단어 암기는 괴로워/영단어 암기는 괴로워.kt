@@ -1,27 +1,28 @@
 package org.example
 
+import java.util.StringTokenizer
 import java.util.PriorityQueue
 
-fun main(args: Array<String>) {
+fun main() {
     val br = System.`in`.bufferedReader()
-    val sb = StringBuilder()
-    val (n, m) = br.readLine().split(" ").map { it.toInt() }
-    val voca = HashMap<String, Int>()
-    repeat(n) {
+    val (N, M) = br.readLine().split(" ").map { it.toInt() }
+  
+    val hashMap = HashMap<String, Int>() // 단어 개수 세어주는 용도
+    repeat(N) {
         val word = br.readLine()
-        if (word.length >= m) {
-            voca[word] = voca.getOrDefault(word, 0) + 1
+        if (word.length >= M) {
+            // 길이가 M이상 단어에 대해서만 처리
+            hashMap[word] = hashMap.getOrDefault(word, 0) + 1 // 단어 개수 측정
         }
     }
-    val sortedVoca = voca.entries.sortedWith(
-        compareByDescending<Map.Entry<String, Int>> { it.value } // 등장 횟수 내림차순
-            .thenByDescending { it.key.length } // 단어 길이 내림차순
-            .thenBy { it.key } // 알파벳 순서 오름차순
-    )
-    //println(sortedVoca)
-    sortedVoca.forEach {
-        sb.append("${it.key}\n")
-    }
+    
+    val sb = StringBuilder()
+
+    hashMap.entries.sortedWith(compareByDescending<Map.Entry<String, Int>> { it.value }
+        .thenByDescending { it.key.length }
+        .thenBy { it.key }
+    ).map { sb.append(it.key).append("\n") }
     println(sb)
+
     br.close()
 }
