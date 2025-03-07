@@ -2,16 +2,17 @@ package org.example
 
 import java.util.StringTokenizer
 
-data class Birthday(val name: String, val day: Int, val month: Int, val year: Int)
+data class Student(val name: String, val dd: Int, val mm: Int, val yyyy: Int)
 
-fun main(args: Array<String>) {
+fun main() {
     val br = System.`in`.bufferedReader()
     val n = br.readLine().toInt()
-    val birthdays = Array<Birthday>(n) {
+    val arr = Array<Student>(n) {
         val st = StringTokenizer(br.readLine())
-        Birthday(st.nextToken(), st.nextToken().toInt(), st.nextToken().toInt(), st.nextToken().toInt())
-    }
-    birthdays.sortWith(compareBy({ it.year }, { it.month }, { it.day }))
-    println("${birthdays[n - 1].name}\n${birthdays[0].name}")
+        Student(st.nextToken(), st.nextToken().toInt(), st.nextToken().toInt(), st.nextToken().toInt())
+    }.sortedWith(compareBy<Student> { it.yyyy }.thenBy { it.mm }.thenBy { it.dd })
+    // 나이 많은 순 정렬
+    println(arr[arr.lastIndex].name)
+    println(arr[0].name)
     br.close()
 }
