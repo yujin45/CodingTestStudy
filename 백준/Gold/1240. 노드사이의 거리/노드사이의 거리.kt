@@ -1,26 +1,42 @@
 package org.example
 
+import java.util.StringTokenizer
+
+data class Node(val num: Int, val dist: Int)
 
 fun main() {
     val br = System.`in`.bufferedReader()
     val (N, M) = br.readLine().split(" ").map { it.toInt() }
-    val graph = Array(N + 1) { mutableListOf<Pair<Int, Int>>() } // 노드, 거리
+
+    val tree = Array(N + 1) { mutableListOf<Node>() }
+
     repeat(N - 1) {
-        val (a, b, distance) = br.readLine().split(" ").map { it.toInt() }
-        graph[a].add(b to distance)
-        graph[b].add(a to distance)
+        // N개의 노드로 이루어진 트리
+        val st = StringTokenizer(br.readLine())
+        val a = st.nextToken().toInt()
+        val b = st.nextToken().toInt()
+        val dist = st.nextToken().toInt()
+
+        // 트리 구성하기
+        tree[a].add(Node(b, dist))
+        tree[b].add(Node(a, dist))
     }
+
+    //println(tree.contentDeepToString())
+
     val sb = StringBuilder()
     repeat(M) {
-        val (p1, p2) = br.readLine().split(" ").map { it.toInt() }
+        // 거리를 알고 싶은 노드 한 쌍
+        val st = StringTokenizer(br.readLine())
         val visited = BooleanArray(N + 1)
-        sb.append(dfs(graph, p1, p2, visited, 0)).append("\n")
+        // 두 노드 사이의 거리 출력
+        sb.append(dfs(tree, st.nextToken().toInt(), st.nextToken().toInt(), visited, 0)).append("\n")
     }
     print(sb)
     br.close()
 }
 
-fun dfs(graph: Array<MutableList<Pair<Int, Int>>>, v: Int, target: Int, visited: BooleanArray, dist: Int): Int {
+fun dfs(graph: Array<MutableList<Node>>, v: Int, target: Int, visited: BooleanArray, dist: Int): Int {
     visited[v] = true
     if (v == target) {
         return dist
@@ -31,6 +47,5 @@ fun dfs(graph: Array<MutableList<Pair<Int, Int>>>, v: Int, target: Int, visited:
             if (ret != -1) return ret
         }
     }
-
-    return -1
+    return -1 // 타겟 못찾은 것
 }
