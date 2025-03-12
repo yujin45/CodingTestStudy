@@ -1,55 +1,63 @@
 package org.example
 
-lateinit var graph: IntArray
-lateinit var visited: BooleanArray
-lateinit var finished: BooleanArray
-val cycleSet = mutableSetOf<Int>() // 사이클에 포함된 숫자 저장
+import java.util.StringTokenizer
 
 fun main() {
     val br = System.`in`.bufferedReader()
 
-    val N = br.readLine().toInt()
-    graph = IntArray(N + 1) // 1차원 배열로 그래프 저장
-    visited = BooleanArray(N + 1) // 방문 체크 배열
-    finished = BooleanArray(N + 1) // DFS 종료 여부 체크
+    /*
+    index가 가리키는 노드들로 구성된 그래프에서
+    사이클이 형성된 노드들을 구하면 고른 index집합과 값 집합이 동일해진다.
+    즉, 사이클이 형성되는 노드들을 구하면 된다.
+    * */
 
+    val N = br.readLine().toInt() // 1 ~ 100
+    val graph = IntArray(N + 1)
     for (i in 1..N) {
-        graph[i] = br.readLine().toInt() // 각 숫자가 가리키는 숫자 저장
+        graph[i] = br.readLine().toInt()
     }
+    // 0이 방문 전, 방문 한 것 -1, 1로 둔다.
 
-    // 1. 모든 숫자에 대해 DFS 실행 (중복 탐색 방지)
+    val result = mutableListOf<Int>()
+    val cycleVisited = BooleanArray(N + 1)
     for (i in 1..N) {
-        if (!visited[i]) {
-            dfs(i, mutableListOf())
+        if (!cycleVisited[i]) {
+            val visited = BooleanArray(N + 1)
+            result += dfs(graph, i, visited, mutableListOf(), cycleVisited)
+            //println(result)
         }
-    }
 
-    // 2. 결과 출력
-    val result = cycleSet.sorted()
-    println(result.size)
-    result.forEach { println(it) }
+    }
+    result.sort()
+    val sb = StringBuilder()
+    sb.append(result.size).append("\n")
+    result.forEach { sb.append(it).append("\n") }
+    print(sb)
+
+    // 뽑힌 정수들은 작은수 -> 큰수 순서로 = 오름차순으로 한줄에 하나씩 출력한다.
+    br.close()
 }
 
-// ✅ DFS 탐색 함수 (사이클 찾기)
-fun dfs(v: Int, path: MutableList<Int>): Boolean {
-    //println("🔍 탐색 시작: v = $v, path = $path")
+fun dfs(graph: IntArray, v: Int, visited: BooleanArray, path: MutableList<Int>, cycleVisited: BooleanArray): List<Int> {
     visited[v] = true
     path.add(v)
-    val next = graph[v]
+    //println("v:$v - path: $path")
+    val neighbor = graph[v]
+    if (!visited[neighbor]) {
+        //println(cycleVisited.contentToString())
+        if (cycleVisited[neighbor]) return listOf()
 
-    if (!visited[next]) { // 아직 방문하지 않은 경우 DFS 탐색
-        if (dfs(next, path)) return true
-    } else if (!finished[next]) { // 방문했지만 DFS가 끝나지 않은 경우 -> 사이클 발생
-        val cycleStart = path.indexOf(next) // 사이클 시작점 찾기
-
-        if (cycleStart != -1) { // 예외 방지: indexOf(next)가 -1이면 subList 실행 X
-            cycleSet.addAll(path.subList(cycleStart, path.size)) // 사이클 부분만 저장
-            //println("🔁 사이클 발견! v = $v, cycleStart = $cycleStart, subpath = ${path.subList(cycleStart, path.size)}")
+        val ret = dfs(graph, neighbor, visited, path, cycleVisited)
+        if (ret.isNotEmpty()) return ret
+    } else { // 사이클 발생
+        // path에서 neighbor 부터 현재까지가 사이클
+        //println("사이클이다!")
+        val temp = path.subList(path.indexOf(neighbor), path.size)
+        //println("${path.indexOf(neighbor)} / $temp")
+        for (t in temp) {
+            cycleVisited[t] = true
         }
-        return true
+        return temp
     }
-
-    finished[v] = true // DFS 종료 표시
-    //println("✅ 탐색 종료: v = $v, finished[$v] = true")
-    return false
+    return listOf()
 }
