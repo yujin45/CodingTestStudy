@@ -1,46 +1,41 @@
-package org.example
-
-import java.util.StringTokenizer
-
-private var ret: Int = 0
+import java.io.*
 
 fun main() {
-    val br = System.`in`.bufferedReader()
+    val br = BufferedReader(InputStreamReader(System.`in`))
     val sb = StringBuilder()
     val T = br.readLine().toInt()
+
     repeat(T) {
         val n = br.readLine().toInt()
-        val graph = IntArray(n + 1)
-        val st = StringTokenizer(br.readLine())
-        for (i in 1..n) {
-            graph[i] = st.nextToken().toInt()
-        }
+        val graph = br.readLine().split(" ").map { it.toInt() }.toIntArray()
         val visited = BooleanArray(n + 1)
-        val finished = BooleanArray(n + 1) // dfs 탐색 끝난 노드
-        ret = 0
+        val finished = BooleanArray(n + 1) // 탐색 종료 여부 체크
+        var count = 0 // 사이클에 포함된 학생 수
+
+        fun dfs(v: Int) {
+            visited[v] = true
+            val next = graph[v - 1]
+
+            if (!visited[next]) {
+                dfs(next)
+            } else if (!finished[next]) {
+                // 사이클이 발생한 경우
+                var node = next
+                while (node != v) {
+                    count++
+                    node = graph[node - 1]
+                }
+                count++ // 자기 자신도 카운트
+            }
+            finished[v] = true // 탐색 완료 처리
+        }
+
         for (i in 1..n) {
-            if (!visited[i]) dfs(graph, i, visited, finished)
+            if (!visited[i]) dfs(i)
         }
-        sb.append(n - ret).append("\n") // 총 학생 수 - 팀을 이룬 학생 수
+
+        sb.append(n - count).append("\n") // 전체 학생 - 팀에 속한 학생 수
     }
+
     print(sb)
-    br.close()
-}
-
-fun dfs(graph: IntArray, v: Int, visited: BooleanArray, finished: BooleanArray) {
-    visited[v] = true // 방문 표시
-    val next = graph[v] // 1:1 연결만 있으므로 이웃은 1개
-
-    if (!visited[next]) { // 아직 방문 전이라면 방문하기
-        dfs(graph, next, visited, finished)
-    } else if (!finished[next]) { // 사이클 발생인데 이미 이전에 탐색한 것 아니면
-        var count = 1
-        var i = next
-        while (i != v) {
-            count++
-            i = graph[i]
-        }
-        ret += count
-    }
-    finished[v] = true
 }
