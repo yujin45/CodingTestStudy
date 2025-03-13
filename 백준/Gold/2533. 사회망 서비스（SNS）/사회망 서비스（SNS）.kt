@@ -15,21 +15,23 @@ fun main() {
         graph[v].add(u)
     }
     val visited = BooleanArray(N + 1)
-    val dp = Array(N + 1) { IntArray(2) } // 자기 선택 1, 자기선택x 0
-    dfs(graph, 1, visited, dp) // 루트를 1이라고 생각하고 진행
-    println(minOf(dp[1][0], dp[1][1]))
+
+    val (rootSelected, rootNotSelected) = dfs(graph, 1, visited) // 루트를 1이라고 생각하고 진행
+    println(minOf(rootSelected, rootNotSelected))
 
     br.close()
 }
 
-fun dfs(graph: Array<MutableList<Int>>, v: Int, visited: BooleanArray, dp: Array<IntArray>) {
+fun dfs(graph: Array<MutableList<Int>>, v: Int, visited: BooleanArray): Pair<Int, Int> {
     visited[v] = true
-    dp[v][1] = 1 // 자기 자신 선택
+    var selected = 1
+    var notSelected = 0
     for (neighbor in graph[v]) {
         if (!visited[neighbor]) {
-            dfs(graph, neighbor, visited, dp)
-            dp[v][1] += minOf(dp[neighbor][1], dp[neighbor][0])
-            dp[v][0] += dp[neighbor][1]
+            val (neighborSelected, neighborNotSelected) = dfs(graph, neighbor, visited)
+            selected += minOf(neighborSelected, neighborNotSelected)
+            notSelected += neighborSelected
         }
     }
+    return (selected to notSelected)
 }
