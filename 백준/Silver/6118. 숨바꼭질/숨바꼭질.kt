@@ -1,6 +1,7 @@
 package org.example
 
 import java.util.StringTokenizer
+import java.util.PriorityQueue
 
 fun main() {
     val br = System.`in`.bufferedReader()
@@ -14,26 +15,26 @@ fun main() {
         graph[b].add(a)
     }
 
-    val distances = IntArray(N + 1) { -1 } // 거리 배열(-1 방문X)
+    val distances = IntArray(N + 1) { -1 }// 거리 배열(-1은 방문X)
     val queue = ArrayDeque<Int>()
 
     distances[1] = 0 // 시작점 1번 헛간
-    queue.addLast(1) // 1번 헛간
+    queue.addLast(1)
 
-    var maxDistance = 0 // 가장 먼 거리
+    var maxDistance = 0
     while (queue.isNotEmpty()) {
         val node = queue.removeFirst()
         for (neighbor in graph[node]) {
             if (distances[neighbor] == -1) {
-                // 방문하지 않은 경우
-                distances[neighbor] = distances[node] + 1 //깊이 확장
+                // 방문 전일 때
+                distances[neighbor] = distances[node] + 1 // 현재에서 길이 확장
                 maxDistance = maxOf(maxDistance, distances[neighbor])
                 queue.addLast(neighbor)
             }
         }
     }
 
-    // 가장 먼 헛간 착지
+    // 가장 먼 헛간 찾기
     var hideNum = -1
     var count = 0
     for (i in 1..N) {
@@ -42,6 +43,9 @@ fun main() {
             count++
         }
     }
-    println("$hideNum $maxDistance $count")
+    val sb = StringBuilder()
+    sb.append(hideNum).append(" ").append(maxDistance).append(" ").append(count)
+    println(sb)
     br.close()
 }
+
