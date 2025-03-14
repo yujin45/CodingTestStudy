@@ -1,82 +1,99 @@
-import java.util.*
+package org.example
 
-data class Fish(val x: Int, val y: Int, val dist: Int) // 물고기 정보 (좌표, 거리)
+import java.util.StringTokenizer
 
-val dx = intArrayOf(-1, 1, 0, 0) // 상하좌우 이동 방향
-val dy = intArrayOf(0, 0, -1, 1)
+data class Shark(var x: Int, var y: Int, var size: Int, var eaten: Int)
+data class Point(var x: Int, var y: Int, var dist: Int)
 
-fun bfs(grid: Array<IntArray>, n: Int, sharkSize: Int, startX: Int, startY: Int): Fish? {
-    val queue: Queue<Triple<Int, Int, Int>> = LinkedList() // BFS 큐 (x, y, 거리)
-    val visited = Array(n) { BooleanArray(n) } // 방문 체크 배열
-    val fishList = mutableListOf<Fish>() // 먹을 수 있는 물고기 리스트
+// 상, 좌, 우, 하
+private val dx = intArrayOf(-1, 0, 0, 1) // 상, 좌, 우, 하
+private val dy = intArrayOf(0, -1, 1, 0)
 
-    queue.add(Triple(startX, startY, 0))
-    visited[startX][startY] = true
+fun main() {
+    val br = System.`in`.bufferedReader()
+    val N = br.readLine().toInt()
+    var fishCount = 0
+    val graph = Array(N) { IntArray(N) }
+    var shark = Shark(0, 0, 2, 0)
+
+    for (i in 0 until N) {
+        val st = StringTokenizer(br.readLine())
+        for (j in 0 until N) {
+            val block = st.nextToken().toInt()
+            if (block in (1..6)) {
+                fishCount++
+                graph[i][j] = block
+            } else if (block == 9) {
+                shark = Shark(i, j, 2, 0)
+                graph[i][j] = 0 // 아기상어 위치 확인 완료로 초기화 
+            } else {
+                graph[i][j] = block
+            }
+        }
+    }
+
+    if (fishCount == 0) {
+        // 물고기가 처음부터 없으면 바로 0 리턴
+        println(0)
+        return
+    }
+
+    var totalTime = 0
+
+    while (true) {
+        val result = bfs(graph, shark, N)
+        if (result == null) break // 먹을 물고기가 없으면 종료
+
+        val (nx, ny, dist) = result
+        totalTime += dist
+        shark.x = nx
+        shark.y = ny
+        shark.eaten++
+
+        if (shark.eaten == shark.size) {
+            shark.size++
+            shark.eaten = 0
+        }
+
+        graph[nx][ny] = 0 // 먹은 위치 빈칸으로 만들기
+    }
+
+    println(totalTime)
+
+
+    br.close()
+}
+
+
+fun bfs(graph: Array<IntArray>, shark: Shark, N: Int): Point? {
+    val queue = ArrayDeque<Point>()
+    val visited = Array(N) { BooleanArray(N) }
+    queue.add(Point(shark.x, shark.y, 0))
+    visited[shark.x][shark.y] = true
+
+    val fishList = mutableListOf<Point>() //(x, y, 거리)
 
     while (queue.isNotEmpty()) {
-        val (x, y, dist) = queue.poll()
+        val (x, y, dist) = queue.removeFirst()
 
         for (i in 0 until 4) {
             val nx = x + dx[i]
             val ny = y + dy[i]
 
-            // 맵 범위 안에 있고, 아직 방문하지 않은 경우
-            if (nx in 0 until n && ny in 0 until n && !visited[nx][ny]) {
-                if (grid[nx][ny] <= sharkSize) { // 현재 상어 크기보다 작거나 같은 경우 이동 가능
-                    queue.add(Triple(nx, ny, dist + 1))
+            if (nx in graph.indices && ny in graph[0].indices && !visited[nx][ny]) {
+                if (graph[nx][ny] <= shark.size) {
+                    // 이동 가능(빈칸 or 먹을 수 있는 크기)
                     visited[nx][ny] = true
+                    queue.add(Point(nx, ny, dist + 1))
 
-                    if (grid[nx][ny] in 1 until sharkSize) { // 먹을 수 있는 물고기라면 리스트에 추가
-                        fishList.add(Fish(nx, ny, dist + 1))
+                    if (graph[nx][ny] in 1 until shark.size) {
+                        // 먹을 수 있는 크기라면
+                        fishList.add(Point(nx, ny, dist + 1))
                     }
                 }
             }
         }
     }
-
-    // 가장 가까운 물고기 찾기 (거리 -> x(위쪽) -> y(왼쪽) 순서로 정렬)
-    return fishList.minWithOrNull(compareBy({ it.dist }, { it.x }, { it.y }))
-}
-
-fun main() {
-    val n = readLine()!!.toInt()
-    val grid = Array(n) { readLine()!!.split(" ").map { it.toInt() }.toIntArray() }
-
-    var sharkX = 0
-    var sharkY = 0
-    var sharkSize = 2 // 초기 상어 크기
-    var eatCount = 0 // 먹은 물고기 수
-    var totalTime = 0 // 총 걸린 시간
-
-    // 아기 상어 위치 찾기
-    for (i in 0 until n) {
-        for (j in 0 until n) {
-            if (grid[i][j] == 9) {
-                sharkX = i
-                sharkY = j
-                grid[i][j] = 0 // 아기 상어 위치를 빈 칸(0)으로 변경
-            }
-        }
-    }
-
-    // 시뮬레이션 시작
-    while (true) {
-        val fish = bfs(grid, n, sharkSize, sharkX, sharkY) ?: break // 먹을 물고기 탐색, 없으면 종료
-
-        // 가장 가까운 물고기로 이동
-        totalTime += fish.dist
-        sharkX = fish.x
-        sharkY = fish.y
-        grid[fish.x][fish.y] = 0 // 물고기 먹음
-
-        // 물고기를 먹으면 카운트 증가
-        eatCount++
-        if (eatCount == sharkSize) { // 크기만큼 먹으면 상어 크기 증가
-            sharkSize++
-            eatCount = 0
-        }
-    }
-
-    // 총 걸린 시간 출력
-    println(totalTime)
+    // 거리 - 상 - 좌 순서
+    return fishList.minWithOrNull(compareBy<Point> { it.dist }.thenBy { it.x }.thenBy { it.y })
 }
