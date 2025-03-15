@@ -1,46 +1,49 @@
-import java.io.*
+package org.example
+
+import java.util.StringTokenizer
+
 
 fun main() {
     val br = System.`in`.bufferedReader()
     val N = br.readLine().toInt()
-    val parent = br.readLine().split(" ").map { it.toInt() }
-    val deleteNode = br.readLine().toInt()
-    br.close()
-
-    val graph = Array(N) { mutableListOf<Int>() }
+    val tree = Array(N) { mutableListOf<Int>() }
+    val st = StringTokenizer(br.readLine())
     var root = -1
-
     for (i in 0 until N) {
-        if (parent[i] == -1) {
+        val parent = st.nextToken().toInt()
+        if (parent == -1) {
             root = i
         } else {
-            graph[parent[i]].add(i)
+            tree[parent].add(i)
         }
     }
-
-    // **Case 1: 삭제할 노드가 루트 노드일 경우, 전체 트리 삭제**
-    if (deleteNode == root) {
+    val target = br.readLine().toInt()
+//    tree.forEach{
+//        println(it)
+//    }
+    //println("root: $root")
+    if (root == target) {
         println(0)
-        return
+    } else {
+        println(dfs(tree, root, target))
     }
 
-    // **Case 2: DFS로 리프 노드 개수 세기**
-    println(countLeafNodes(graph, root, deleteNode))
+    br.close()
 }
 
-// DFS로 리프 노드 개수를 계산
-fun countLeafNodes(graph: Array<MutableList<Int>>, node: Int, target: Int): Int {
-    if (node == target) return 0  // 삭제 노드 발견 → 탐색 중지
-
-    // 삭제 노드를 제외한 자식 노드 개수 확인
-    val children = graph[node].filter { it != target }
-
-    // **리프 노드 조건:** 자식이 없거나, 삭제된 노드만 있었던 경우
-    if (children.isEmpty()) return 1
-
+fun dfs(graph: Array<MutableList<Int>>, v: Int, target: Int): Int {
     var count = 0
-    for (child in children) {
-        count += countLeafNodes(graph, child, target)
+    var isLeaf = true
+    for (neighbor in graph[v]) {
+        if (neighbor != target) {
+            // target이 아닌 곳만 방문해서 leaf인지 체크
+            isLeaf = false
+            count += dfs(graph, neighbor, target)
+        }
+    }
+    if (isLeaf) {
+        // 자식이 없어서 마지막 노드였으면
+        return 1
     }
     return count
 }
