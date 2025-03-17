@@ -2,32 +2,33 @@ package org.example
 
 import java.util.StringTokenizer
 
+
 fun main() {
     val br = System.`in`.bufferedReader()
+
+    // 입력
     val n = br.readLine().toInt()
+    val numbers = IntArray(n)
     val st = StringTokenizer(br.readLine())
-    val arr = IntArray(n)
-    repeat(n) {
-        arr[it] = st.nextToken().toInt()
+    for (i in 0 until n) {
+        numbers[i] = st.nextToken().toInt()
     }
-    arr.sort()
-    //println(arr.contentToString())
     val x = br.readLine().toInt()
-    var start = 0
-    var end = n - 1
+    // 
+
+    val seen = mutableSetOf<Int>() // 등장한 숫자 저장
     var count = 0
-    while (start < end) {
-        val check = arr[start] + arr[end]
-        if (check < x) { // x보다 작으면 start를 오른쪽으로 이동
-            start++
-        } else if (check > x) { // x보다 크면 end를 왼쪽으로 이동
-            end--
-        } else {
-            // 값이 같으면 카운트 증가 후 start를 오른쪽으로 이동
+
+    for (num in numbers) {
+        if ((x - num) in seen) {
+            // x에서 num 뺀 것이 존재한다면 쌍이 존재하는 것 (num, x-num)
             count++
-            start++
         }
+        seen.add(num) // 현재 숫자를 set에 추가
     }
+    
     println(count)
     br.close()
 }
+
+
