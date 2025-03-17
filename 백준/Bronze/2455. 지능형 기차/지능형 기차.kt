@@ -1,15 +1,22 @@
 package org.example
 
+import java.util.StringTokenizer
+
 
 fun main() {
     val br = System.`in`.bufferedReader()
-    var maxPeople = Int.MIN_VALUE
-    var current = 0
+
+    var maxCount = 0
+    var currentCount = 0
+
     repeat(4) {
-        val (off, on) = br.readLine().split(" ").map { it.toInt() }
-        current += (-off + on)
-        maxPeople = maxOf(maxPeople, current)
+        val st = StringTokenizer(br.readLine())
+        currentCount -= st.nextToken().toInt()
+        currentCount += st.nextToken().toInt()
+        maxCount = maxOf(maxCount, currentCount)
     }
-    println(maxPeople)
+    println(maxCount)
+
     br.close()
 }
+
