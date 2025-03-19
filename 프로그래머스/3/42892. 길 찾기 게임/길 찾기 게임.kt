@@ -1,59 +1,60 @@
 class Solution {
     data class Node(
-        val index: Int, val x:Int, val y:Int,
-        var left: Node?=null, var right:Node?=null)
+    val index:Int, val x:Int, val y:Int,
+    var left:Node? =null, var right:Node? = null)
+    
     fun solution(nodeinfo: Array<IntArray>): Array<IntArray> {
-        // 노드 리스트 (index + 좌표 저장)
-        val nodes = nodeinfo.mapIndexed{index, (x, y) -> Node(index+1, x, y)}
-            .sortedWith(compareByDescending<Node>{it.y}.thenBy{it.x})
-        // 루트 노드 생성
+        val nodes = nodeinfo.mapIndexed{index, (x, y)-> Node(index+1, x, y)}.sortedWith(compareByDescending<Node>{it.y}.thenBy{it.x})
+        
         val root = nodes[0]
-
-        // 이진 트리 생성
+        val nodeMap = mutableMapOf(root.x to root)
+        
+        // 이진트리 생성(빠른 탐색을 위해 map활용)
         for(i in 1 until nodes.size){
-            insertNode(root, nodes[i])
+            insertNode(root, nodes[i], nodeMap)
         }
-
-        // 순회 결과 저장
-        val preorderList = mutableListOf<Int>()
+         val preorderList = mutableListOf<Int>()
         val postorderList = mutableListOf<Int>()
 
         preorder(root, preorderList)
         postorder(root, postorderList)
 
         return arrayOf(preorderList.toIntArray(), postorderList.toIntArray())
-
     }
-
-    // 이진 트리에 노드 삽입
-    fun insertNode(parent:Node, child:Node){
-        if(child.x < parent.x){
-            // 왼쪽
-            if(parent.left == null){
-                parent.left = child
+    
+    
+    fun insertNode(parent:Node, child:Node, nodeMap:MutableMap<Int, Node>){
+        var current:Node? = parent
+        
+        while(current != null){
+            if(child.x < current.x){
+                if(current.left ==null){
+                    current.left = child
+                    break
+                }
+                current = current.left
             }else{
-                insertNode(parent.left!!, child)
+                if(current.right==null){
+                    current.right = child
+                    break
+                }
+                current = current.right
             }
-        }else{
-            if(parent.right == null) parent.right = child
-            else insertNode(parent.right!!, child)
         }
+        nodeMap[child.x] = child
+    }
+    
+    fun preorder(node: Node?, result: MutableList<Int>) {
+        if (node == null) return
+        result.add(node.index)
+        preorder(node.left, result)
+        preorder(node.right, result)
     }
 
-    // 전위 순회
-    fun preorder(node: Node?, result : MutableList<Int>){
-        if(node ==null) return // 노드 더 없으면 리턴
-        result.add(node.index)
-        preorder(node.left, result) // 왼쪽 먼저 탐색
-        preorder(node.right, result) // 이후 오른쪽
-    }
-    // 후위 순회
-    fun postorder(node:Node?, result :MutableList<Int>){
-        if(node == null) return
+    fun postorder(node: Node?, result: MutableList<Int>) {
+        if (node == null) return
         postorder(node.left, result)
-        postorder(node.right, result) 
+        postorder(node.right, result)
         result.add(node.index)
     }
-
 }
-
