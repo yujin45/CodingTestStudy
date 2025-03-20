@@ -1,24 +1,27 @@
 package org.example
 
 import java.util.StringTokenizer
+import java.util.TreeSet
+
 
 fun main() {
     val br = System.`in`.bufferedReader()
+
     val n = br.readLine().toInt()
-    val hashSet = HashSet<String>()
+
+    val treeSet = TreeSet<String>(compareByDescending { it })
     repeat(n) {
         val st = StringTokenizer(br.readLine())
         val name = st.nextToken()
-        if (st.nextToken() == "enter") {
-            hashSet.add(name)
+        val command = st.nextToken()
+        if (command == "enter") {
+            treeSet.add(name)
         } else {
-            hashSet.remove(name) // O(1) 해시 테이블 사용해서
+            treeSet.remove(name)
         }
     }
-    
-    val sortedSet = hashSet.toSortedSet(compareByDescending { it }) // O(N log N), 내부적으로 이진 트리 정렬 수행.
     val sb = StringBuilder()
-    sortedSet.forEach { sb.append(it).append("\n") }
+    treeSet.forEach { sb.append(it).append("\n") }
     print(sb)
     br.close()
 }
