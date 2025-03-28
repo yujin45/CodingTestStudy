@@ -1,18 +1,24 @@
 from collections import deque
 
 def solution(prices):
-    prices = deque(prices)
-    answer = []
+    n = len(prices)
+    answer = [0]*n
+    stack = []
     
-    while prices:
-        # price 뽑아서 확인할거임
-        price = prices.popleft()
-        sec = 0 # 초 초기화    
-        # 남은 애들이랑 비교
-        for p in prices:
-            sec+=1 # 비교하는 순간 1초 흐른 것
-            if p < price:
-                # 다음 순번이 내 가격보다 작으면 하락한 것
-                break
-        answer.append(sec)
-    return answer    
+    for i in range(n):
+        # 현재 가격이 이전 가격보다 떨어졌다면 스택 처리
+        # stack에는 인덱스 값을 넣어줌
+        while stack and prices[stack[-1]] > prices[i]:
+            # 만약 이전 가격보다 현재가 작으면
+            top = stack.pop()
+            answer[top] = i - top # 현재 인덱스 - 떨어지기 전 인덱스
+        stack.append(i)
+    
+    # 끝까지 안 떨어진 애들 처리
+    while stack:
+        top = stack.pop()
+        answer[top] = n - 1 - top
+    
+    return answer
+            
+            
