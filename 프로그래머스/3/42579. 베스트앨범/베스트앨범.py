@@ -1,24 +1,29 @@
+from dataclasses import dataclass
 from collections import defaultdict
-def solution(genres, plays):
-    songs = {}
-    total = {}
-    for i in range(0, len(plays)):
-        songs.setdefault(genres[i], []).append((i, plays[i]))
-        total.setdefault(genres[i], 0) 
-        total[genres[i]] += plays[i]
-        
-    sorted_total_items = dict(sorted(total.items(), key = lambda x: x[1], reverse=True))
 
+@dataclass
+class Song:
+    num:int
+    play:int
+
+def solution(genres, plays):
+    total = defaultdict(int)
+    songs = defaultdict(list)
     
-    for key, value in songs.items():
-        songs[key].sort(key = lambda x: x[1], reverse=True)
+    for index, (g, p) in enumerate(zip(genres, plays)):
+        total[g] += p
+        songs[g].append(Song(index, p))
     
-    ret = []
     
-    for key in sorted_total_items.keys():
-        ret.append(songs[key][0][0])
-        if len(songs[key]) >= 2:
-            ret.append(songs[key][1][0])
-            
+    sorted_total = dict(sorted(total.items(), key = lambda x:x[1], reverse = True))
+    for ge in songs:
+        songs[ge].sort(key=lambda song:song.play, reverse = True)
     
-    return ret
+    
+    answer = []
+    
+    for key in sorted_total.keys():
+        for s in songs[key][:2]:
+            answer.append(s.num)
+        
+    return answer
