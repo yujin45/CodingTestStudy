@@ -1,31 +1,35 @@
 import heapq
-import re # 구분자 여러개 쓸 때 정규식 용도
-
-text = "apple|banana,grape.orange"
-fruits = re.split(r'[|,]', text)
+from collections import defaultdict
 
 def solution(operations):
-    heap = []
+    min_heap = []
+    max_heap = []
+    entry_counter = defaultdict(int)
+
     for op in operations:
-        #print(op)   
-        if "D 1" in op and heap:
-            # 최대값 삭제 
-            largest = heapq.nlargest(1, heap)[0] # 얘는 찾아주기만 함
-            #print(largest)
-            heap.remove(largest) # 그냥 지우면 빵꾸나서 힙 아니고 걍 리스트 되어버리는 듯
-            #print(heap)
-            heapq.heapify(heap) # 없어도 통과 되긴 했는데 remove 하면 힙 구조 무너진다고는 함
-        elif "D -1" in op and heap:
-            heapq.heappop(heap)
-            #print(heap)
-        else:
+        if op[0] == 'I':
             num = int(op[2:])
-            heapq.heappush(heap, num)
-            
-            #print(heap)
-    if len(heap)>0:
-        return [heapq.nlargest(1, heap)[0], heapq.heappop(heap)]
-    else:
+            heapq.heappush(min_heap, num)
+            heapq.heappush(max_heap, -num)
+            entry_counter[num] += 1
+
+        elif op == 'D 1':  # 최대값 삭제
+            while max_heap:
+                num = -heapq.heappop(max_heap)
+                if entry_counter[num] > 0:
+                    entry_counter[num] -= 1
+                    break
+
+        elif op == 'D -1':  # 최소값 삭제
+            while min_heap:
+                num = heapq.heappop(min_heap)
+                if entry_counter[num] > 0:
+                    entry_counter[num] -= 1
+                    break
+
+    # 남아있는 값들만 정리
+    result = [num for num, count in entry_counter.items() if count > 0]
+
+    if not result:
         return [0, 0]
-    
-           
+    return [max(result), min(result)]
