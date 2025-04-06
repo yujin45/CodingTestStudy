@@ -1,13 +1,7 @@
 def solution(array, n):
-    answer = 0
-    temp = []
-    smallest = []
-    for a in array:
-        temp.append(abs(a-n))
-    min_ = min(temp)
-    for i, t in enumerate(temp):
-        if t == min_:
-            smallest.append(array[i])
-        
-        
-    return min(smallest)
+    sorted_array = sorted(array)
+    diff = []
+    for a in sorted_array:
+        diff.append(abs(a-n))
+    min_diff = min(diff)
+    return sorted_array[diff.index(min_diff)]
