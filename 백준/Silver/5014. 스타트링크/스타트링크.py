@@ -1,29 +1,34 @@
-import sys
 from collections import deque
 
-input = sys.stdin.readline
-
-
 def bfs(F, S, G, U, D):
-    if S == G:
-        return 0  # 시작 = 도착이면 바로 0 반환
-    visited = [-1] * (F+1) # F층까지 도달 최소 횟수
+    visited = [-1] * (F + 1)  # 층은 1부터 시작, -1은 아직 방문 안 함
+    queue = deque()
+
+    queue.append(S)
     visited[S] = 0
-    queue = deque([S])
 
     while queue:
         current = queue.popleft()
+
+        # 도착!
         if current == G:
-            # 도달했다면 나오기
             return visited[current]
-        for next_pos in [current + U, current - D]:
-            if 1 <= next_pos <= F and visited[next_pos] == -1:
-                visited[next_pos] = visited[current] + 1
-                queue.append(next_pos)
 
-    return "use the stairs" # 도달 못했을 경우
+        # 위로 이동
+        if U > 0:
+            up = current + U
+            if up <= F and visited[up] == -1:
+                visited[up] = visited[current] + 1
+                queue.append(up)
 
+        # 아래로 이동
+        if D > 0:
+            down = current - D
+            if down >= 1 and visited[down] == -1:
+                visited[down] = visited[current] + 1
+                queue.append(down)
 
+    return "use the stairs"
 
 # 입력
 F, S, G, U, D = map(int, input().split())
