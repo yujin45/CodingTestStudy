@@ -1,43 +1,37 @@
 import sys
-
-sys.setrecursionlimit(10 ** 6)
 input = sys.stdin.readline
 
 dx = [-1, 1, 0, 0]
 dy = [0, 0, -1, 1]
 
-
-def dfs(graph, x, y, visited):
+def dfs_iterative(graph, x, y, visited, h):
+    stack = [(x, y)]
     visited[x][y] = True
-    for i in range(4):
-        nx = x + dx[i]
-        ny = y + dy[i]
-        if 0 <= nx < len(graph) and 0 <= ny < len(graph[0]) and not visited[nx][ny] and graph[nx][ny] > h:
-            dfs(graph, nx, ny, visited)
 
+    while stack:
+        cx, cy = stack.pop()
+        for i in range(4):
+            nx = cx + dx[i]
+            ny = cy + dy[i]
+            if 0 <= nx < len(graph) and 0 <= ny < len(graph[0]):
+                if not visited[nx][ny] and graph[nx][ny] > h:
+                    visited[nx][ny] = True
+                    stack.append((nx, ny))
 
 n = int(input())
-graph = []
-for _ in range(n):
-    graph.append(list(map(int, input().split())))
+graph = [list(map(int, input().split())) for _ in range(n)]
 
-# high = set()
-# for i in range(n):
-#     for j in range(n):
-#         high.add(graph[i][j])
+max_val = max(map(max, graph))  # 최대 높이
+max_safe = 0
 
-max_high = max(map(max, graph))
-
-max_ret = 1
-# 내리는 비의 양을 다 조사
-for h in range(max_high):
-    # h이하는 잠김 => h 초과인 애들은 안전지대
-    visited = [[False] * n for _ in range(n)]
-    safe_area = 0
+for h in range(0, max_val + 1):  # ✅ 비 높이 0부터 시작
+    visited = [[False]*n for _ in range(n)]
+    safe_zone = 0
     for i in range(n):
         for j in range(n):
-            if not visited[i][j] and graph[i][j] > h:
-                dfs(graph, i, j, visited)
-                safe_area += 1
-    max_ret = max(safe_area, max_ret)
-print(max_ret)
+            if graph[i][j] > h and not visited[i][j]:
+                dfs_iterative(graph, i, j, visited, h)
+                safe_zone += 1
+    max_safe = max(max_safe, safe_zone)
+
+print(max_safe)
