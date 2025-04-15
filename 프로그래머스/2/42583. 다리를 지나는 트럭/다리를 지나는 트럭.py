@@ -1,24 +1,25 @@
 from collections import deque
 
 def solution(bridge_length, weight, truck_weights):
-    queue = deque([0 for _ in range(bridge_length)])
-    done = 0 
-    now_total_weight = 0
+    # 다리 길이만큼 유지
+    bridge = deque([0 for _ in range(bridge_length)])
     trucks = deque(truck_weights)
+    current_total_weight = 0 # weight만큼 버티기 가능
+    done_trucks = 0
     time = 0
-    
-    while done < len(truck_weights):
-        done_weight = queue.popleft()
-        now_total_weight -= done_weight
-        if done_weight > 0:
-            done +=1
-        
-        if trucks and trucks[0] + now_total_weight <= weight:
-            truck = trucks.popleft()
-            queue.append(truck)
-            now_total_weight += truck
+    while done_trucks < len(truck_weights):
+        done = bridge.popleft()
+        current_total_weight -= done
+        if done !=0:
+            done_trucks+=1
+                
+        if trucks and weight >= (current_total_weight + trucks[0]):
+            # 탑승 가능
+            current_truck = trucks.popleft()
+            bridge.append(current_truck)
+            current_total_weight += current_truck
         else:
-            queue.append(0)
+            bridge.append(0)
         time+=1
-        
+    
     return time
