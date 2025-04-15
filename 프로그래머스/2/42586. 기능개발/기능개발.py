@@ -1,19 +1,17 @@
 import math
+
 def solution(progresses, speeds):
-    need = []
-    for i in range(0, len(speeds)):
-        need.append(math.ceil((100 - progresses[i]) / speeds[i]))
-    
-    answer = []
-    count = 1
-    cneed = need[0]
-    for i in range(1, len(need)):
-        if cneed < need[i]:
-            answer.append(count)
-            count = 1
-            cneed = need[i]
+    result = []
+    done = 0
+    time = 0
+    for p, s in zip(progresses, speeds):
+        need = 100 - p - s*time
+        if need > 0:
+            result.append(done)
+            done = 1
+            time += math.ceil(need/s)
         else:
-            count+=1
-    answer.append(count)
+            done+=1
+    result.append(done)
     
-    return answer
+    return result[1:]
