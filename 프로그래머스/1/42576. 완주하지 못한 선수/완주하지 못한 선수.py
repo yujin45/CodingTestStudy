@@ -1,10 +1,8 @@
+from collections import Counter
+
 def solution(participant, completion):
-    player = {}
-    for name in participant:
-        player[name] = player.get(name, 0) + 1
-    for name in completion:
-        player[name]-=1
-        if player[name] == 0:
-            del player[name]
-    
-    return list(player.keys())[0]
+    p = Counter(participant)
+    c = Counter(completion)
+    d = p - c
+    #return list(d.keys())[0]
+    return next(iter(d))
