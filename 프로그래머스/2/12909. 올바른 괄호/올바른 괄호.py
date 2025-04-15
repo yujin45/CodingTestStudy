@@ -1,16 +1,15 @@
 def solution(s):
-    if s[0] == ')':
-        return False
-    
-    stack = []
-    
+    count = 0
     for ps in s:
         if ps == '(':
-            stack.append(ps)
-        elif stack and stack[-1] == '(' and ps==')':
-            stack.pop()
+            count+=1
         else:
-            stack.append(ps)
-            
-            
-    return not stack
+            count-=1
+        
+        if count < 0:
+            return False # 닫는 괄호가 먼저 오면
+        
+    if count != 0:
+        return False # 다 돌고도 짝이 안 맞으면
+    
+    return True
