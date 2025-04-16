@@ -1,33 +1,38 @@
 import heapq
+from dataclasses import dataclass
+from collections import deque
+
+@dataclass
+class Task:
+    number : int
+    request_time : int
+    time : int
 
 def solution(jobs):
-    answer = 0
-    start = -1 # 이전 완료된 시간
-    now = 0 # 현재 시점
-    heap = []
-    i = 0 # 완료 작업 개수
+    ready_queue = []
     
+    t_time = 0 # 반환시간 : 작업 종료 - 요청
+    n = len(jobs)
+    current_time = 0
+    done = 0
     
-    while i < len(jobs):
-        # 작업이 있는 동안 진행
+    job_queue = deque(
+        sorted([Task(num, rt, t) for num, (rt, t) in enumerate(jobs)],
+              key = lambda x: x.request_time
+              )
+    )
+    while done < n:
+        while job_queue and current_time >= job_queue[0].request_time:
+            task = job_queue.popleft()
+            heapq.heappush(ready_queue, (task.time, task.request_time, task.number, task))
         
-        # 작업을 확인하는데 시작 가능한 작업들을 체크해서 소요시간 짧은 순으로 heap에 넣을겨
-        for j in jobs:
-            if start < j[0] <= now:
-                # 실행 시작 시간이 이전 완료시간 이후여야 하고 현재 시점보다는 전이어야지 
-                # 작업 힙에 들어감
-                heapq.heappush(heap, (j[1], j[0])) # (수행시간, 실행시점)
-            
-        # 작업 할 것이 있으면 진행
-        if len(heap)>0:
-            # C - A - B(현재)
-            current = heapq.heappop(heap) # 현재 처리중인 작업
-            start = now # start가 C완료였던 것을 A 완료시점으로 = 지금시점으로 업데이트
-            now += current[0] # 처리시간 더하기
-            answer += (now - current[1]) # 지금 - 작업 수행 시작 시간 = 걸린 시간
-            i+=1
+        if ready_queue:
+            _, _, _, ptask = heapq.heappop(ready_queue)
+            current_time += ptask.time
+            t_time += (current_time - ptask.request_time)
+            done +=1
         else:
-            now+=1 
-    answer = answer // len(jobs)
-        
-    return answer
+            # 대기 중인 작업이 없을 때는 시간을 이동시켜줘야 함!
+            current_time = job_queue[0].request_time
+            
+    return t_time // done
