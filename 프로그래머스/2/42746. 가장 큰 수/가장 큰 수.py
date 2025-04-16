@@ -1,22 +1,7 @@
-from functools import cmp_to_key
-
-def compare(a, b):
-    if a + b > b + a:
-        return -1  # a가 먼저
-    elif a + b < b + a:
-        return 1   # b가 먼저
-    else:
-        return 0
-
 def solution(numbers):
-    # 숫자들을 문자열로 변환
-    numbers_str = list(map(str, numbers))
-    
-    # 커스텀 정렬
-    numbers_str.sort(key=cmp_to_key(compare))
-    
-    # 합친 결과가 000...일 경우 → "0"으로 처리
-    if numbers_str[0] == '0':
-        return '0'
-    
-    return ''.join(numbers_str)
+    numbers = list(map(str, numbers)) 
+    # 3번 반복하게 된다면 (1000이하라서 3번 반복)
+    # 333, 303030 이렇게 확장되고 문자열 기준 333이 더 크다고 판별
+    sorted_numbers = sorted(numbers, key = lambda x: x*3, reverse = True) 
+    result = ''.join(sorted_numbers)
+    return '0' if result[0] =='0' else result
