@@ -1,16 +1,23 @@
 from itertools import permutations
 
 def solution(k, dungeons):
-    perm = list(permutations(dungeons, len(dungeons)))
-    max_count =0
-    for duns in perm:
-        count = 0
-        now = k
-        for need, minus in duns:
-            if now >= need:
-                now -= minus
-                count+=1
+    
+    n = len(dungeons)
+    perm = list(permutations(dungeons, n))
+    
+    
+    max_clear = 0
+    for case in perm:
+        now_k = k
+        clear_count = 0
+        for start, end in case:
+            if start <= now_k:
+                now_k -= end
+                clear_count += 1
             else:
+                # 진입 불가
                 break
-        max_count = max(count, max_count)
-    return max_count 
+        max_clear = max(max_clear, clear_count)
+            
+
+    return max_clear
