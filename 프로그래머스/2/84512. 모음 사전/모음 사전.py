@@ -1,15 +1,14 @@
-import itertools
+from itertools import product
 
 def solution(word):
-    alpha_list = ['A', 'E', 'I', 'O', 'U']
-    permutations_list = []
-    for i in range(1, len(alpha_list)+1):
-        permutations_list += [''.join(item) for item in itertools.product(alpha_list, repeat = i)]
-    dictionary = sorted(permutations_list)
+    # 방법 1: AEOIU를 perm 순열 -> set -> sort , 단어 찾기는 index로 찾기
+    # 방법 2: backtrack으로 순열?
     
-    answer=0
-    for i in range(len(dictionary)):
-        if dictionary[i] ==word:
-            answer = i+1
+    # 방법 1로 일단 진행해보기
+    alpha_dict = []
+    for i in range(1, 6):
+        for p in product('AEIOU', repeat=i):
+            alpha_dict.append(''.join(p))
+    alpha_dict.sort()
     
-    return answer
+    return alpha_dict.index(word) + 1
