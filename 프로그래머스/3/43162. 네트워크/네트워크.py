@@ -1,20 +1,17 @@
-def dfs(computers, v, visited, n):
-    visited[v] = 1
-    
-    for i in range(n):
-        if computers[v][i] and not visited[i]:
-            # 노드 있고 방문 전이면
-            dfs(computers, i, visited, n)
-            
 def solution(n, computers):
-    answer = 0
+    visited = [False] * n
     
-    visited = [0 for _ in range(n)]
-
+    def dfs(node):
+        visited[node] = True
+        for j in range(n):
+            if computers[node][j] == 1 and not visited[j]:
+                # node와 연결된 모든 j노드를 방문처리
+                dfs(j)
+    
+    answer = 0
     for i in range(n):
         if not visited[i]:
-            dfs(computers, i, visited, n)
-            answer+=1
+            dfs(i) # 새로운 네트워크 시작
+            answer += 1
             
     return answer
-
