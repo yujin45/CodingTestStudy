@@ -1,62 +1,64 @@
-import sys
 from collections import deque
+import sys
 
 input = sys.stdin.readline
+#
+# 우, 하, 좌, 상
+dx = [0, 1, 0, -1]
+dy = [1, 0, -1, 0]
+d_idx = 0
 
-n = int(input())
-k = int(input())
-# 보드 nxn
-board = [[0] * n for _ in range(n)]
 
-# print("board 초기화 ---------")
-# def print_board(board):
-#     for b in board:
-#         print(b)
-#     print("=====================")
-# print_board(board)
+def rotate_left_90(d_idx):
+    return (d_idx + 1) % 4
 
-for _ in range(k):
-    i, j = map(int, input().split())
-    board[i - 1][j - 1] = 1
 
-L = int(input())  # 방향 변환 횟수
+def rotate_right_90(d_idx):
+    return (d_idx + 3) % 4
 
-cx, cy = 0, 0  # 초기 위치
-dx, dy = 0, 1  # 우측 방향
-bam = deque([(0, 0)])
-board[0][0] = 2
-time = 0
 
-turn_dict = {}
+N = int(input())
+graph = [[0] * N for _ in range(N)]
+
+K = int(input())
+for _ in range(K):
+    apple_x, apple_y = map(int, input().split())
+    graph[apple_x - 1][apple_y - 1] = 1
+
+L = int(input())
+directions = deque()
 for _ in range(L):
-    X, C = map(str, input().split())
-    turn_dict[int(X)] = C
+    X, C = input().split()
+    directions.append((int(X), C))
 
+snake = deque([(0, 0)])
 
-while True:
-    # time이 X가 되면 방향 전환
-    time += 1
-    # 이동
-    nx = cx + dx
-    ny = cy + dy
-
-    if 0 <= nx < n and 0 <= ny < n and board[nx][ny] != 2:
-        # 범위 내 & 자기 자신 아니면 머리 이동
-        cx, cy = nx, ny
-        if board[nx][ny] != 1:
+game = True
+time = 0
+while game:
+    # front가 꼬리 end가 머리
+    # 몸 길이를 늘려 머리를 다음 칸에 위치
+    head_x, head_y = snake[-1][0], snake[-1][1]
+    nx, ny = head_x + dx[d_idx], head_y + dy[d_idx]
+    if 0 <= nx < N and 0 <= ny < N and graph[nx][ny] != 2:
+        # 사과 체크
+        if graph[nx][ny] != 1:
             # 사과 없으면 꼬리 줄여야 함
-            bx, by = bam.popleft()
-            board[bx][by] = 0
-        bam.append((cx, cy))
-        board[cx][cy] = 2
-    else:
-        # 게임 오버
-        print(time)
-        exit()
+            tail_x, tail_y = snake.popleft()
+            graph[tail_x][tail_y] = 0
 
-    if time in turn_dict:
-        # X 초 지나고서 회전
-        if turn_dict[time] == 'D':  # 우회전
-            dx, dy = dy, -dx
-        elif turn_dict[time] == 'L':  # 좌회전
-            dx, dy = -dy, dx
+        graph[nx][ny] = 2
+        snake.append((nx, ny))
+
+    else:
+        game = False
+
+    time += 1
+    if directions and time == directions[0][0]:
+        _, C = directions.popleft()
+        if C == 'L':
+            d_idx = (d_idx + 3) % 4
+        elif C == 'D':
+            d_idx = (d_idx + 1) % 4
+
+print(time)
