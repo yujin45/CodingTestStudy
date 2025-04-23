@@ -8,15 +8,6 @@ dx = [0, 1, 0, -1]
 dy = [1, 0, -1, 0]
 d_idx = 0
 
-
-def rotate_left_90(d_idx):
-    return (d_idx + 1) % 4
-
-
-def rotate_right_90(d_idx):
-    return (d_idx + 3) % 4
-
-
 N = int(input())
 graph = [[0] * N for _ in range(N)]
 
@@ -32,13 +23,14 @@ for _ in range(L):
     directions.append((int(X), C))
 
 snake = deque([(0, 0)])
-
-game = True
+graph[0][0] = 2
 time = 0
-while game:
+
+while True:
+    time += 1
     # front가 꼬리 end가 머리
     # 몸 길이를 늘려 머리를 다음 칸에 위치
-    head_x, head_y = snake[-1][0], snake[-1][1]
+    head_x, head_y = snake[-1]
     nx, ny = head_x + dx[d_idx], head_y + dy[d_idx]
     if 0 <= nx < N and 0 <= ny < N and graph[nx][ny] != 2:
         # 사과 체크
@@ -51,14 +43,13 @@ while game:
         snake.append((nx, ny))
 
     else:
-        game = False
-
-    time += 1
+        break  # 여기에서 break하면 time 카운트 될 수 있게 앞으로 빼기
+        
     if directions and time == directions[0][0]:
         _, C = directions.popleft()
         if C == 'L':
-            d_idx = (d_idx + 3) % 4
+            d_idx = (d_idx - 1) % 4  # 왼쪽 회전
         elif C == 'D':
-            d_idx = (d_idx + 1) % 4
+            d_idx = (d_idx + 1) % 4  # 오른쪽 회전
 
 print(time)
