@@ -1,19 +1,19 @@
 import sys
 
 input = sys.stdin.readline
-
-pipes = input().strip()
+#
+ps = list(input().strip())
 stack = []
-pieces = 0
+count = 0
 
-for i in range(len(pipes)):
-    if pipes[i] == '(':
+for i, ch in enumerate(ps):
+    if ch == '(':
         stack.append('(')
     else:
         stack.pop()
-        if pipes[i-1] == '(': # 레이저
-            pieces += len(stack)
-        else: # 막대 끝
-            pieces +=1 # 막대기 끝 1조각
+        if ps[i - 1] == '(':  # 레이저
+            count += len(stack)
+        else:  # 막대기 끝
+            count += 1
 
-print(pieces)
+print(count)
