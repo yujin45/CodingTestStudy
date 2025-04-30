@@ -1,8 +1,6 @@
 def solution(phone_book):
-    sorted_phone_book = sorted(phone_book)
-    
-    for i in range(len(sorted_phone_book)-1):
-        if sorted_phone_book[i+1].startswith(sorted_phone_book[i]):
+    phone_book.sort()
+    for i in range(1, len(phone_book)):
+        if phone_book[i].startswith(phone_book[i-1]):
             return False
-    
     return True
