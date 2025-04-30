@@ -1,19 +1,19 @@
 from collections import deque
 
 def solution(priorities, location):
-    ready_queue = deque()
-    
+    waiting_queue = deque()
     for i, p in enumerate(priorities):
-        ready_queue.append((i, p))
+        waiting_queue.append((i, p))
     
-    count = 1
-    while ready_queue:
-        (i, p) = ready_queue.popleft()
-        if any(p < rq[1] for rq in ready_queue):
-            ready_queue.append((i, p))
+    count = 0
+    while waiting_queue:
+        current = waiting_queue.popleft()
+            
+        if any(current[1] < p for _, p in waiting_queue):
+            waiting_queue.append(current)
         else:
-            if i == location:
+            count += 1
+            if current[0] == location:
                 return count
-            count+=1
     
     return count
