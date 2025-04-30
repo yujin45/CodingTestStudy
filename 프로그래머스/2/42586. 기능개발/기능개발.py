@@ -1,17 +1,18 @@
-import math
+from math import ceil
 
 def solution(progresses, speeds):
+    days = 0
     result = []
     done = 0
-    time = 0
     for p, s in zip(progresses, speeds):
-        need = 100 - p - s*time
-        if need > 0:
+        now_need = ceil((100 - p) / s)
+        if now_need > days:
+            days = now_need
             result.append(done)
             done = 1
-            time += math.ceil(need/s)
         else:
-            done+=1
+            done += 1
+            
     result.append(done)
     
     return result[1:]
