@@ -2,15 +2,14 @@ import heapq
 
 def solution(scoville, K):
     heapq.heapify(scoville)
-    shake_count = 0
-    while scoville[0] < K:
-        if len(scoville) == 1:
-            return -1
+    answer = 0
+    while scoville[0]< K and len(scoville) >= 2:
         first = heapq.heappop(scoville)
         second = heapq.heappop(scoville)
-        mix = first + (second * 2)
+        mix = first + second * 2
         heapq.heappush(scoville, mix)
-        shake_count += 1
-        
-    
-    return shake_count
+        answer += 1
+    check = heapq.heappop(scoville)
+    if check < K:
+        return -1
+    return answer
