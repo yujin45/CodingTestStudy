@@ -1,17 +1,18 @@
+def dfs(graph, v, visited):
+    visited[v] = True
+    
+    for i in range(len(graph)):
+        if graph[v][i] == 1 and not visited[i]:
+            dfs(graph, i, visited)
+            
+    
 def solution(n, computers):
-    visited = [False] * n
+    count = 0
+    visited = [False] * (n+1)
     
-    def dfs(node):
-        visited[node] = True
-        for j in range(n):
-            if computers[node][j] == 1 and not visited[j]:
-                # node와 연결된 모든 j노드를 방문처리
-                dfs(j)
-    
-    answer = 0
     for i in range(n):
         if not visited[i]:
-            dfs(i) # 새로운 네트워크 시작
-            answer += 1
+            dfs(computers, i, visited)
+            count+=1
             
-    return answer
+    return count
