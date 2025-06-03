@@ -1,26 +1,30 @@
 from collections import deque
 
-def isDiffOne(current, word):
+def isDiffOne(current, w):
     count = 0
-    for c, w in zip(current, word):
-        if c != w:
-            count += 1
+    for a, b in zip(current, w):
+        if a != b:
+            count+=1
         if count > 1:
             return False
     return True if count == 1 else False
-
+    
 def solution(begin, target, words):
+    if target not in words:
+        return 0
+    
     queue = deque([(begin, 0)])
-    visited = set() # 방문한 단어 체크용
+    word_set = set()
     
     while queue:
-        current, current_count = queue.popleft()
+        current, depth = queue.popleft()
+        
         if current == target:
-            return current_count
-        for word in words:
-            if word not in visited:
-                if isDiffOne(current, word):
-                    visited.add(word)
-                    queue.append((word, current_count + 1))
-    
+            return depth
+        
+        for w in words:
+            if w not in word_set and isDiffOne(current, w):
+                queue.append((w, depth+1))
+                word_set.add(w)
+        
     return 0
