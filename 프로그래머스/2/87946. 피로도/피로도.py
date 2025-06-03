@@ -1,20 +1,21 @@
+from collections import deque
 from itertools import permutations
 
 def solution(k, dungeons):
     n = len(dungeons)
-    
     perm = list(permutations(dungeons, n))
 
-    max_value = 0
-    for p in perm:
+    answer = -1
+    for case in perm:
         count = 0
-        current_k = k
-        for need, d in p:
-            if current_k < need:
+        current = k
+        for need, lose in case:
+            if current >= need:
+                current -= lose
+                count+=1
+            else:
                 break
-            current_k -= d
-            count+=1
-        max_value = max(max_value, count)
-        
+        answer = max(answer, count)
     
-    return max_value
+    
+    return answer
