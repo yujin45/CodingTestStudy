@@ -1,9 +1,10 @@
 from itertools import product
 
 def solution(word):
-    perm = []
+    dictionary = []
+    
     for i in range(1, 6):
-        perm += list(''.join(p) for p in product('AEIOU', repeat = i))
-    perm.sort()
-
-    return perm.index(word) + 1
+        dictionary.extend(list(''.join(temp) for temp in product("AEIOU", repeat =i)))
+    
+    dictionary.sort()
+    return dictionary.index(word) + 1
