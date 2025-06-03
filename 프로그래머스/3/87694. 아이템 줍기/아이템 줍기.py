@@ -1,55 +1,50 @@
 from collections import deque
 
-def bfs(graph, x, y, tx, ty):
-    queue = deque([(x, y)])
-    dx = [0, 1, 0, -1]
-    dy = [1, 0, -1, 0]
+def solution(rectangle, characterX, characterY, itemX, itemY):
+    
+    # 위치 확대
+    characterX, characterY, itemX, itemY = characterX * 2, characterY * 2, itemX * 2, itemY * 2
+    MAX_N = 102
+    maps = [[0] * MAX_N for _ in range(MAX_N)]
+    visited = [[0] * MAX_N for _ in range(MAX_N)]
+    
+    for rect in rectangle:
+        sx, sy, ex, ey = rect
+        sx, sy, ex, ey = sx * 2, sy * 2, ex * 2, ey * 2
+        
+        # 1로 채우기 
+        for i in range(sx, ex+1):
+            for j in range(sy, ey+1):
+                maps[i][j] = 1
+        
+    for rect in rectangle:
+        sx, sy, ex, ey = rect
+        sx, sy, ex, ey = sx * 2, sy * 2, ex * 2, ey * 2
+        
+        
+        # 가운데 공간 비우기
+        for i in range(sx+1, ex):
+            for j in range(sy+1, ey):
+                maps[i][j] = 0
+
+    queue = deque([(characterX, characterY, 0)])
+    visited[characterX][characterY] = True
+    
+    dx = [1, 0, -1, 0]
+    dy = [0, 1, 0, -1]
     
     while queue:
-        (cx, cy) = queue.popleft()
-        if (cx, cy) == (tx, ty):
-            return
+        cx, cy, depth = queue.popleft()
+        
+        if (cx, cy) == (itemX, itemY):
+            return depth // 2
+        
         for i in range(4):
             nx = cx + dx[i]
             ny = cy + dy[i]
-            if 0<= nx < len(graph) and 0<= ny < len(graph[0]):
-                if graph[nx][ny] == 1:
-                    graph[nx][ny] += graph[cx][cy]
-                    queue.append((nx, ny))
-
-def solution(rectangle, characterX, characterY, itemX, itemY):
-    # 조건에 좌표값 범위가 1~50이라 아래와 같이 확장해도 됨
-    # MAX = 102
-    # board = [[0]*MAX for _ in range(MAX)]
-
-    # 좌표 확장
-    max_x = max(max(x1, x2) for x1, _, x2, _ in rectangle) * 2 + 2
-    max_y = max(max(y1, y2) for _, y1, _, y2 in rectangle) * 2 + 2
-    board = [[0] * max_y for _ in range(max_x)]
+            if 0<= nx < MAX_N and 0 <= ny < MAX_N:
+                if maps[nx][ny] == 1 and not visited[nx][ny]:
+                    queue.append((nx, ny, depth+1))
+                    visited[nx][ny] = True
     
-    # 좌표도 확장
-    characterX *= 2
-    characterY *= 2
-    itemX *= 2
-    itemY *= 2
-    
-    # 전체 외곽 채우기 
-    scaled = [[k*2 for k in rect] for rect in rectangle] # 2배한 것
-    for x1, y1, x2, y2 in scaled:
-        for i in range(x1, x2+1):
-            for j in range(y1, y2+1):
-                board[i][j] = 1
-    
-    # 내부 제거
-    for x1, y1, x2, y2 in scaled:
-        for i in range(x1+1, x2):
-            for j in range(y1+1, y2):
-                board[i][j] = 0
-    
-    # BFS 진행하기
-    bfs(board, characterX, characterY, itemX, itemY)
-    for b in board:
-        print(b)
-        
-    
-    return board[itemX][itemY] //2 # 2배 확장 좌표여서 다시 절반으로 해줘야 함!
+    return 0
