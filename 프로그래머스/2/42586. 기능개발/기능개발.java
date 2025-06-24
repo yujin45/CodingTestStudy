@@ -1,30 +1,22 @@
-import java.util.ArrayList;
+import java.util.ArrayDeque;
 
 class Solution {
     public int[] solution(int[] progresses, int[] speeds) {
-        ArrayList<Integer> countList = new ArrayList<>();
-        int days=0;
-        int index=0; 
-        int count = 0;
-        // 인덱스로 확인, 마지막 항목까지 검사
-        while(index < progresses.length){
-            // days 설정하기
-            if((100 - progresses[index]) % speeds[index] !=0){
-                // 나머지가 생기면
-                days = (100 - progresses[index]) /speeds[index] +1;
+        ArrayDeque<Integer> answer = new ArrayDeque<>();
+        int cDays = -1;
+        int done = 0;
+        for(int i = 0; i < progresses.length; i++){
+            int nowNeedDays = (int) Math.ceil((100.0 - progresses[i]) / speeds[i]);
+            if(nowNeedDays > cDays){
+                answer.addLast(done);
+                done = 1;
+                cDays = nowNeedDays;
             }else{
-                days = (100 - progresses[index]) /speeds[index];
+                done++;
             }
-            // days 확인하기 
-            count = 0;
-            while((index < progresses.length) && ( (progresses[index] + speeds[index]*days)>=100)){
-                // 작업 완료될 경우
-                index++;
-                count++;
-            }
-            countList.add(count);
-            
         }
-        return countList.stream().mapToInt(Integer::intValue).toArray();
+        answer.removeFirst();
+        answer.addLast(done);
+        return answer.stream().mapToInt(Integer::intValue).toArray();
     }
 }
