@@ -1,24 +1,14 @@
-import java.util.ArrayDeque;
-
 class Solution {
     boolean solution(String s) {
-        ArrayDeque<Character> stack = new ArrayDeque<>();
-        
-        char[] a = s.toCharArray();
-        for(char c : a){
-            if(c=='('){
-                stack.push(c);
-            }else{
-                // )일 경우 스택이 비어 있거나, 
-                if(stack.isEmpty()){
-                    return false;
-                }else{
-                    stack.pop();
-                }
-                
-                
-            }
+        if (s.charAt(0) == ')' || s.charAt(s.length() - 1) == '(') return false;
+        int count = 0;
+        for(char ch : s.toCharArray()){
+            if(ch == '(') count++;
+            else if(ch == ')') count--;
+            
+            if(count < 0) return false;
         }
-        return stack.isEmpty();
+        
+        return count == 0;
     }
 }
