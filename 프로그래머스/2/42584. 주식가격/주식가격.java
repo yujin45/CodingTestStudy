@@ -1,17 +1,25 @@
-// 일단 O(N^2)으로 라도 풀어보기
+import java.util.ArrayDeque;
+
 class Solution {
     public int[] solution(int[] prices) {
-        int [] answer = new int [prices.length];
-        for(int i =0; i<prices.length; i++){
-            int count = 0;
-            B:for(int j = i+1; j <prices.length; j++){
-                count++;
-                if(prices[i] > prices[j]){
-                    break B; 
+        ArrayDeque<Integer> stack = new ArrayDeque<>();
+        int[] result = new int[prices.length];
+        
+        for(int i = 0; i < prices.length; i++){
+              while(!stack.isEmpty() && prices[stack.peekLast()] > prices[i]){
+                    // 떨어진 경우
+                    int topIndex = stack.removeLast();
+                    result[topIndex] = i - topIndex;
                 }
-            }
-            answer[i]=count;
+            
+            stack.add(i);
         }
-        return answer;
+        
+        while(!stack.isEmpty()){
+            int topIndex = stack.removeLast();
+            result[topIndex] = prices.length - 1 - topIndex;
+        }
+        
+        return result;
     }
 }
