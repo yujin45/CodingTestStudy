@@ -1,56 +1,59 @@
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.PriorityQueue;
+import java.util.Comparator;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
+
+class Task{
+    int id;
+    int reqTime;
+    int time;
+    
+    public Task(int id, int reqTime, int time){
+        this.id = id;
+        this.reqTime = reqTime;
+        this.time = time;
+    }
+}
 
 class Solution {
-
-    static class Task implements Comparable<Task> {
-        int num;
-        int reqTime;
-        int time;
-
-        public Task(int num, int reqTime, int time) {
-            this.num = num;
-            this.reqTime = reqTime;
-            this.time = time;
-        }
-
-        @Override
-        public int compareTo(Task other) {
-            return this.time - other.time; // 작업 시간 기준 오름차순
-        }
-    }
-
     public int solution(int[][] jobs) {
-        int n = jobs.length;
-        int currentTime = 0;
-        int tTime = 0;
-        int done = 0;
-
-        // 요청 시간 기준 정렬 후 큐에 담기
-        Queue<Task> jobQueue = new LinkedList<>();
-        Arrays.sort(jobs, Comparator.comparingInt(j -> j[0]));
-        for (int i = 0; i < n; i++) {
-            jobQueue.add(new Task(i, jobs[i][0], jobs[i][1]));
+        List<Task> jobList = new ArrayList<>();
+        for(int i = 0; i < jobs.length; i++){
+            jobList.add(new Task(i, jobs[i][0], jobs[i][1]));
         }
-
-        PriorityQueue<Task> readyQueue = new PriorityQueue<>(); // 작업시간 기준 최소힙
-
-        while (done < n) {
-            // 현재 시간까지 요청된 작업 모두 큐에 추가
-            while (!jobQueue.isEmpty() && jobQueue.peek().reqTime <= currentTime) {
-                readyQueue.offer(jobQueue.poll());
+        jobList.sort(Comparator.comparingInt((Task t)-> t.reqTime));
+        
+        PriorityQueue<Task> readyQueue = new PriorityQueue<>(Comparator
+                                                             .comparingInt((Task t)->t.time)
+                                                             .thenComparingInt((Task t)->t.reqTime)
+                                                             .thenComparingInt((Task t)->t.id));
+        int currentTime = 0;
+        int totalTime = 0;
+        int index = 0;
+        int count = 0;
+        
+        // 모든 job 끝낼 때까지 진행
+        while(count < jobs.length){
+            // 현재 시간까지 도달한 작업들 readyQueue에 추가
+            while(index < jobList.size() && jobList.get(index).reqTime <= currentTime){
+                readyQueue.add(jobList.get(index));
+                index++;
             }
-
-            if (!readyQueue.isEmpty()) {
+            
+            // 실행 가능한 작업 있다면 실행
+            if(!readyQueue.isEmpty()){
                 Task task = readyQueue.poll();
                 currentTime += task.time;
-                tTime += currentTime - task.reqTime;
-                done++;
-            } else {
-                // 대기 중인 작업이 없을 때 다음 요청 시간으로 이동
-                currentTime = jobQueue.peek().reqTime;
+                totalTime += (currentTime - task.reqTime);
+                count++;
+            }else{
+                // 실행할 수 있는 작업이 없다면 시간만 증가
+                currentTime++;
             }
         }
-
-        return tTime / n;
+        
+        return totalTime/jobs.length;
     }
 }
