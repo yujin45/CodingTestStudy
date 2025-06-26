@@ -5,36 +5,33 @@ class Solution {
         Arrays.sort(rocks);
         List<Integer> list = new ArrayList<>();
         for(int rock : rocks) list.add(rock);
-        list.add(distance); // 마지막 추가
-        
-        int left = 1;
-        int right = distance;
-        int answer = 0;
-        // mid는 바위 사이 거리 최솟값으로 설정
-        
-        while(left <= right){
-            int mid = (left + right) / 2;
-            int prev = 0, removed = 0;
-            
-            for(int rock : list){
-                if(rock - prev < mid){
-                    // 둘 사이 거리가 mid 이하라면, mid가 최솟값이 안되니까 바위 제거
-                    removed++;
-                }else{
-                    prev = rock; // 최소 mid를 만족하면 다음 체크
+        list.add(distance); // 마지막 도착 지점 추가
+
+        long left = 1;
+        long right = distance; 
+        long answer = 0;
+
+        while (left <= right) {
+            long mid = (left + right) / 2; // 최소 거리 후보
+            int removed = 0;
+            int prev = 0;
+
+            for (int rock : list) {
+                if (rock - prev < mid) {
+                    removed++; // 최소 거리 못 만족하니까 바위 제거
+                } else {
+                    prev = rock;
                 }
             }
-            
-            if(removed > n){
-                // n개 넘어가게 제거해야 하면 최소 mid를 더 줄여주기
-                right = mid - 1; 
-            }else{
-                answer = mid;
-                left = mid + 1; // n개 이하 제거되면 최소 mid를 더 늘려서 mid의 최댓값 찾기
+
+            if (removed > n) {
+                right = mid - 1; // 너무 많이 제거했으니 최소 거리 줄이기
+            } else {
+                answer = mid; // 가능한 거리 → 더 큰 거리도 시도
+                left = mid + 1;
             }
         }
-        
 
-        return answer;
+        return (int) answer;
     }
 }
