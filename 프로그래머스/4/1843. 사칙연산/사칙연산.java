@@ -1,5 +1,11 @@
+/*
+2025-06-26
+다시 보기 이해X
+*/
+
 public class Solution {
     public int solution(String[] arr) {
+        // arr 내의 숫자와 연산자 중 숫자만 n개
         int n = (arr.length + 1) / 2;
         int[][] dpMax = new int[n][n];
         int[][] dpMin = new int[n][n];
