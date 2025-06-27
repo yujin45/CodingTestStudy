@@ -1,49 +1,73 @@
 import java.util.*;
+// TreeMap은 key 기준으로만 정렬 가능
+// Map<String, Integer> map = new TreeMap<>(Comparator.reverseOrder());
 
-class Song{
-    int id;
-    int play;
-    
-    public Song(int id, int play){
-        this.id = id;
-        this.play = play;
-    }
-}
+// Map<String, String> map = new HashMap<>();
+// // value 길이 기준 내림차순 정렬
+// List<Map.Entry<String, String>> sortedEntries = new ArrayList<>(map.entrySet());
+// sortedEntries.sort(Comparator.comparingInt(e -> e.getValue().length()).reversed());
 
 class Solution {
     public int[] solution(String[] genres, int[] plays) {
-        Map<String, Integer> genMap = new HashMap<>(); // 장르별 총 재생수
-        Map<String, List<Song>> musicMap = new HashMap<>();
+        Map<String, Integer> genresMap = new HashMap<>();
+        Map<String, List<Song>> playsMap = new HashMap<>();
         
-        for (int i = 0; i < genres.length; i++){
-            String gen = genres[i];
+        for(int i = 0; i < genres.length; i++){
+            String genre = genres[i];
             int play = plays[i];
-            
-            genMap.put(gen, genMap.getOrDefault(gen, 0) + play);
-            
-            musicMap.computeIfAbsent(gen, k -> new ArrayList<>()).add(new Song(i, play));
+            genresMap.put(genre, genresMap.getOrDefault(genre, 0) + play);
+            // ▼ 아래 기억하기 computeIfAbsent는 k -> 반환되는 것에 .add를 할 수 있는 것(putIfAbsent 주의)
+            playsMap.computeIfAbsent(genre, k -> new ArrayList<>()).add(new Song(genre, i, play));
         }
         
-        // 장르별 정렬
-        List<String> sortedGenres = new ArrayList<>(genMap.keySet());
-        sortedGenres.sort((a, b) -> genMap.get(b) - genMap.get(a)); // 내림차순
+        // ▼ Map 정렬하는 방식도 기억해두기
+        List<Map.Entry<String, Integer>> sortedEntries = new ArrayList<>(genresMap.entrySet());
+        sortedEntries.sort(Comparator.comparingInt(Map.Entry<String, Integer>::getValue).reversed());
         
-        List<Integer> result = new ArrayList<>();
-        
-        for(String genre: sortedGenres){
-            List<Song> songList = musicMap.get(genre);
-            // 노래 정렬
-            songList.sort((s1, s2) -> {
-                if(s1.play != s2.play) return s2.play - s1.play;
-                else return s1.id - s2.id;
-            });
-            
-            // 최대 2개 수록
-            for (int i = 0; i < Math.min(2, songList.size()); i++){
-                result.add(songList.get(i).id);
+        List<Integer> answer = new ArrayList<>();
+        for(Map.Entry<String, Integer> entry : sortedEntries){
+            String genre = entry.getKey();
+            List<Song> list = playsMap.get(genre);
+            list.sort(Comparator.comparingInt((Song s) -> -s.play));
+            for(int i = 0; i < Math.min(2, list.size()); i++){
+                answer.add(list.get(i).id);
             }
         }
         
-        return result.stream().mapToInt(i -> i).toArray();
+    
+        return answer.stream().mapToInt(i->i).toArray();
     }
+     
 }
+
+class Song{
+        int id, play;
+        String genre;
+        
+        public Song(String genre, int id, int play){
+            this.genre = genre;
+            this.id = id;
+            this.play = play;
+        }
+        
+        @Override
+        public boolean equals(Object obj){
+            if(!(obj instanceof Song)) return false; // 상속 없을 예정이라 instanceof로 진행
+            Song s = (Song) obj;
+            return this.id == s.id &&
+                    this.play == s.play &&
+                    Objects.equals(this.genre, s.genre);
+        }
+        
+        @Override
+        public int hashCode(){
+            return Objects.hash(id, play, genre);
+        }
+        
+        @Override
+        public String toString(){
+            return "Song("+genre+", "+ id+", "+ play+")";
+        }
+        
+    }
+
