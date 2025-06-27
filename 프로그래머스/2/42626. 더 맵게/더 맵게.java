@@ -8,16 +8,17 @@ class Solution {
             pq.add(s);
         }
         
-        int count = 0;
+        int answer = 0;
         while(pq.size() > 1 && pq.peek() < K){
             int first = pq.poll();
             int second = pq.poll();
-            int newScoville = first + (second * 2);
-            pq.add(newScoville);
-            count++;
+            int next = first + (second * 2);
+            pq.add(next);
+            answer++;
         }
         
         if(pq.peek() < K) return -1;
-        return count;
+        
+        return answer;
     }
 }
