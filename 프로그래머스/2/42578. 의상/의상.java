@@ -3,20 +3,29 @@ import java.util.HashMap;
 
 class Solution {
     public int solution(String[][] clothes) {
-        int answer = 1;
-        // 종류 당 : 종류 개수 + 1 (안 입을 경우)
-        // 각 종류 별 곱하여 조합 구하기 그 후 1 빼기(아무것도 안 입을 경우)
         Map<String, Integer> map = new HashMap<>();
-        for(String[] c : clothes){
-            // 같은 이름 가진 의상 존재 X // 아무것도 안 입을 경우 1을 디폴트
-            map.put(c[1], map.getOrDefault(c[1], 1) + 1);
-        }
         
-        for(int count : map.values()){
-            answer *=count;
+        for(String[] clo : clothes){
+            String kind = clo[1];
+            map.put(kind, map.getOrDefault(kind, 0) + 1);
         }
-       
+        // 엔트리로 사용
+        // int total = 1;
+        // for(Map.Entry<String, Integer> entry : map.entrySet()){
+        //     total *= (entry.getValue() + 1);
+        // }
+        // return total - 1;
         
-        return answer-1;
+        // value만 뽑아서 사용
+        // int total = 1;
+        // for(int count : map.values()){ // key는 map.keySet()으로 받아야 함
+        //     total *= (count+1);
+        // }
+        // return total - 1;
+        
+        int total = map.values().stream()
+                    .mapToInt(count -> count+1)
+                    .reduce(1, (a, b) -> a*b);
+        return total - 1;
     }
 }
