@@ -18,12 +18,14 @@ class Solution {
         }
         
         List<Integer> answer = new ArrayList<>();
+        // ▼ count 배열을 stream으로 바꿔서 max구하기 기억
         int maxValue = Arrays.stream(count).max().getAsInt();
         for(int i = 0; i < count.length; i++){
             if(count[i] == maxValue){
                 answer.add(i+1);
             }
         }
+        // ▼ List는 반환할 때 toArray해주기
         return answer.stream().mapToInt(i->i).toArray();
     }
 }
