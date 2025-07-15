@@ -1,36 +1,42 @@
 import heapq
+from collections import defaultdict
 from dataclasses import dataclass
 from collections import deque
 
 @dataclass
-class Task:
-    num : int
+class Job:
+    id: int
     req_time : int
-    time : int
-    
+    duration : int
+
 def solution(jobs):
-    ready_queue = []
-    
-    t_time = 0 # 반환 시간
+    total_time = 0 # 총 반환시간
+    done  = 0
     n = len(jobs)
     current_time = 0
-    done = 0
     
-    # 요청 시간 기준 job 정렬
-    job_queue = deque(sorted([Task(num, req_time, time) for num, (req_time, time) in enumerate(jobs)], key = lambda x : x.req_time))
+    jobs_list = []
+    for i, (req, dur) in enumerate(jobs):
+        jobs_list.append(Job(i, req, dur))
+    jobs_list.sort(key = lambda job : job.req_time)
+    
+    job_queue = deque(jobs_list)
+    ready_queue = []
     
     while done < n:
+        # 모든 작업 처리할 때까지
         while job_queue and job_queue[0].req_time <= current_time:
-            task = job_queue.popleft()
-            heapq.heappush(ready_queue, (task.time, task.req_time, task.num, task))
+            job = job_queue.popleft()
+            heapq.heappush(ready_queue, (job.duration, job.req_time, job.id, job))
         
         if ready_queue:
-            _, _, _, ptask = heapq.heappop(ready_queue)
-            current_time += ptask.time
-            t_time += (current_time - ptask.req_time)
+            # 대기큐에 있으면
+            _, _, _, task = heapq.heappop(ready_queue)
+            current_time += task.duration
+            total_time += (current_time - task.req_time)
             done += 1
         else:
-            # 대기중인 작업 없을 때는 시간을 이동시켜줘야 함
             current_time = job_queue[0].req_time
-            
-    return t_time // done
+        
+    
+    return total_time // n
