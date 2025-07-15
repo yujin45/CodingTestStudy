@@ -1,19 +1,17 @@
 from math import ceil
-
 def solution(progresses, speeds):
     answer = []
+    now_day = 0
     count = 0
-    days = ceil((100 - progresses[0]) / speeds[0])
     for p, s in zip(progresses, speeds):
-        need_days = ceil((100 - p) / s)
-        if days >= need_days:
-            count+=1
-        else:
+        need_day = ceil((100 - p) / s)
+        
+        if now_day < need_day:
             answer.append(count)
             count = 1
-            days = need_days
+            now_day = need_day
+        else:
+            count+=1
     
-    if sum(answer) != len(speeds):
-        answer.append(count)
-    
-    return answer
+    answer.append(count)
+    return answer[1:]
