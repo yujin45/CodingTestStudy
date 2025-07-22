@@ -5,23 +5,26 @@ def solution(distance, rocks, n):
     
     left = 1
     right = distance
-    answer = 0
+    answer = right
     
     while left <= right:
-        mid = (left + right) // 2
-        prev = 0
-        remove_count = 0
+        mid = (left + right) // 2 # 거리의 최솟값
         
+        remove_count = 0
+        prev = 0
         for rock in rocks:
             if rock - prev < mid:
-                remove_count += 1 # 바위 제거
+                # 최소거리 mid보다 작으면 제거
+                remove_count += 1
             else:
-                prev = rock # 바위 유지 
-        
+                prev = rock
         if remove_count > n:
-            right = mid - 1 # 너무 많이 제거해야 하니 거리 줄여야 함
+            # 너무 많이 제거해야 한다면 최소 거리 줄이기
+            right = mid - 1
         else:
-            answer = mid # 이 거리 가능, 더 키울 수도 있음
+            # n개 이하로 제거했다면 최소 거리를 늘릴 수 있음
+            answer = mid
             left = mid + 1
+        
     
-    return answer
+    return answer 
