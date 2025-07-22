@@ -1,18 +1,14 @@
-def dfs(graph, v, visited):
-    visited[v] = True
-    
-    for i in range(len(graph)):
-        if graph[v][i] == 1 and not visited[i]:
-            dfs(graph, i, visited)
+def dfs(computers, visited, com):
+    visited[com] = True
+    for i in range(len(computers)):
+        if computers[com][i] == 1 and not visited[i]:
+            dfs(computers, visited, i)
             
-    
 def solution(n, computers):
-    count = 0
-    visited = [False] * (n+1)
-    
-    for i in range(n):
-        if not visited[i]:
-            dfs(computers, i, visited)
-            count+=1
-            
-    return count
+    visited = [False] * n
+    network = 0
+    for com in range(n):
+        if not visited[com]:
+            dfs(computers, visited, com)
+            network += 1
+    return network
