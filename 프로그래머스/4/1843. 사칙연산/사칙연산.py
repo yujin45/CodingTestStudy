@@ -1,3 +1,4 @@
+# 다시 볼 것. 이해 필요.
 def solution(arr):
     n = len(arr)
     dp_max = [[None] * n for _ in range(n)]
