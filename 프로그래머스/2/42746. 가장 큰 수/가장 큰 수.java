@@ -4,9 +4,9 @@ class Solution {
     public String solution(int[] numbers) {
         List<String> numbersList = new ArrayList<>();
         for(int num : numbers){
-            numbersList.add(String.valueOf(num));
+            numbersList.add(String.valueOf(num)); // 체크
         }
-        numbersList.sort((o1, o2) -> (o2+o1).compareTo(o1+o2));
+        numbersList.sort((o1, o2) -> (o2+o1).compareTo(o1+o2)); // 외워
         StringBuilder sb = new StringBuilder();
         for(String num : numbersList){
             sb.append(num);
