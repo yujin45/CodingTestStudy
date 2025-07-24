@@ -1,13 +1,13 @@
 def solution(routes):
-    routes.sort(key = lambda x : x[1]) # 끝점 기준 정렬
-    # [ [0, 10], [2, 5], [6, 9] ] 이런 경우 
-    
-    answer = 1
-    now_camera = routes[0][1]
+    routes.sort(key = lambda x : x[1]) # 종료 시간이 빠른 순으로 정렬
+    curr_camera = -30_000 # 조건에서 주어진 값
+    answer = 0
     
     for start, end in routes:
-        if start > now_camera:
-            # 지금 카메라가 담지 못하는 곳이면
-            now_camera = end
+        if start > curr_camera:
+            # 시작 지점이 지금 담을 수 없다면
+            curr_camera = end
             answer += 1
+    
+    
     return answer
