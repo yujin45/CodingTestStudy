@@ -1,17 +1,18 @@
 def solution(n, times):
     left = 1
-    right = n * max(times) # O(N)
-    minimum_time = right
+    right = n * max(times)
+    answer = right
     
     while left <= right:
         mid = (left + right) // 2
         
-        able_n = sum([mid // time for time in times])
-
-        if able_n >= n:
-            minimum_time = mid
+        total_sum = sum([mid // time for time in times])
+        
+        if total_sum >= n:
+            # 시간 더 줄여도 됨
+            answer = mid
             right = mid - 1
         else:
-            left = mid + 1    
-    
-    return minimum_time
+            left = mid + 1
+        
+    return answer
