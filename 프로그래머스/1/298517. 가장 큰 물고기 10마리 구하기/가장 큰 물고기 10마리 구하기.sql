@@ -2,3 +2,4 @@ SELECT ID, LENGTH
 FROM FISH_INFO
 ORDER BY LENGTH DESC, ID ASC
 LIMIT 10;
+-- 단, 가장 큰 물고기 10마리 중 길이가 10cm 이하인 경우는 없습니다.
