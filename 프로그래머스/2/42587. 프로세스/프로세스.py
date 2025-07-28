@@ -1,21 +1,23 @@
+import heapq
 from collections import deque
 
 def solution(priorities, location):
-    count = 0
-    ready_queue = deque()
+    priority = []
+    queue = deque([])
     
     for i, p in enumerate(priorities):
-        ready_queue.append((i, p))
+        heapq.heappush(priority, -p)
+        queue.append((i, p))
     
-    while ready_queue:
-        (i, p) = ready_queue.popleft()
-        if any(p < rp for (ri, rp) in ready_queue):
-            ready_queue.append((i, p))
-        else:
+    count = 0
+    while priority:
+        if priority[0] == -queue[0][1]:
+            heapq.heappop(priority)
+            curr_location, _ = queue.popleft()
             count += 1
-            if i == location:
+            if curr_location == location:
                 return count
+        else:
+            queue.append(queue.popleft())
             
-    
-    
-    return count
+    return 0
