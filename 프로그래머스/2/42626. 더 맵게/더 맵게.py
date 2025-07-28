@@ -2,17 +2,17 @@ import heapq
 
 def solution(scoville, K):
     heapq.heapify(scoville)
-    shake_time = 0
+    count = 0
     
     while len(scoville) > 1 and scoville[0] < K:
-        # 2개 이상 있거나 K보다 작을 경우만 썪기
+        # 2개 이상이고 K 보다 작은 것들이 있으면 섞기
         first = heapq.heappop(scoville)
         second = heapq.heappop(scoville)
-        shake = first + (second * 2)
-        heapq.heappush(scoville, shake)
-        shake_time += 1
+        mixed = first + (second * 2)
+        heapq.heappush(scoville, mixed)
+        count += 1
     
     if scoville[0] < K:
-        # 모든 음식 K이상 못하는 경우
         return -1
-    return shake_time
+
+    return count
