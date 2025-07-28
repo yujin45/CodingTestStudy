@@ -2,45 +2,49 @@ import heapq
 from collections import defaultdict
 
 def solution(operations):
-    min_heap = []
     max_heap = []
-    validation = defaultdict(int)
+    min_heap = []
+    count_dict = defaultdict(int)
     
     for operation in operations:
-        op, num = operation.split()
-        num = int(num)
-        if operation[0] == 'I':
-            # 큐에 숫자 삽입
-            heapq.heappush(min_heap, num)
+        if operation.startswith("I"):
+            # 삽입
+            oper = operation.split(" ")
+            num = int(oper[1])
             heapq.heappush(max_heap, -num)
-            validation[num] = True
-        elif operation.startswith('D -'):
-            # 최솟값 삭제
+            heapq.heappush(min_heap, num)
+            count_dict[num] += 1
+        elif operation.startswith("D -"):
             while min_heap:
-                temp = heapq.heappop(min_heap)
-                if validation[temp] > 0:
-                    validation[temp] -= 1
+                num = heapq.heappop(min_heap)
+                if count_dict[num] > 0:
+                    count_dict[num] -= 1
                     break
         else:
-            # 최댓값 삭제
             while max_heap:
-                temp = -heapq.heappop(max_heap)
-                if validation[temp]>0:
-                    validation[temp] -=1
+                num = -heapq.heappop(max_heap)
+                if count_dict[num] > 0:
+                    count_dict[num] -= 1
                     break
     
-    min_val = 0
-    max_val = 0
-    while max_heap:
-        temp = -heapq.heappop(max_heap)
-        if validation[temp] > 0:
-            max_val = temp
-            break
-            
+    if not min_heap or not max_heap:
+        return [0,0]
+    
+    max_value = float('-inf')
+    min_value = float('inf')
+    
     while min_heap:
-        temp = heapq.heappop(min_heap)
-        if validation[temp] > 0:
-            min_val = temp
+        num = heapq.heappop(min_heap)
+        if count_dict[num] > 0:
+            min_value = num
             break
-        
-    return [max_val, min_val]
+    
+    
+    while max_heap:
+        num = -heapq.heappop(max_heap)
+        if count_dict[num] > 0:
+            max_value = num
+            break
+    
+    answer = [max_value, min_value]
+    return answer
