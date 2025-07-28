@@ -1,28 +1,28 @@
 from collections import deque
 
 def solution(bridge_length, weight, truck_weights):
-    total_weight = 0
-    bridge = deque([0] * bridge_length)
     done = 0
+    total_weight = 0
     time = 0
-    trucks = deque(truck_weights)
-    trucks_total_count = len(truck_weights)
     
-    while done < trucks_total_count:
-        # 먼저 다리 지나게 하기
+    bridge = deque([0 for _ in range(bridge_length)]) # 0으로 초기화된 다리
+    trucks = deque(truck_weights) # 트럭들
+    
+    while done < len(truck_weights):
         done_truck = bridge.popleft()
-        if done_truck > 0:
-            total_weight -= done_truck
+        total_weight -= done_truck
+        if done_truck != 0:
             done += 1
         
-        # 트럭 다리에 놓을 수 있는지
-        if trucks and total_weight + trucks[0] <= weight:
-            truck = trucks.popleft()
-            total_weight += truck
-            bridge.append(truck)
+        if trucks:
+            if trucks[0] + total_weight <= weight:
+                truck = trucks.popleft()
+                total_weight += truck
+                bridge.append(truck)
+            else:
+                bridge.append(0)
         else:
-            bridge.append(0)      
-            
-        time+=1
+            bridge.append(0)        
+        time += 1
     
     return time
